@@ -24,6 +24,20 @@ namespace BookShop.Areas.Admin.Controllers
                 .Include(c=>c.ProductTypes).ToList());
         }
 
+        // POST Index action
+        [HttpPost]
+        public IActionResult Index(int? lowPrice, int? highPrice)
+        {
+            var book = _db.Products.Include(c=> c.ProductTypes).Where(c=> c.Price >= lowPrice && c.Price <= highPrice).ToList();
+
+            if(lowPrice == null || highPrice == null)
+            {
+                book = _db.Products.Include(c => c.ProductTypes).ToList();
+            }
+            return View(book);
+        }
+
+
         // GET Create Action
         public IActionResult Create()
         {
