@@ -1,0 +1,93 @@
+﻿@using BookShop.Models
+@model IEnumerable<Products>
+@{
+	ViewData["Title"] = "Index";
+	//Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<br />
+<div class="row">
+	<div class="col-6">
+		<h2 class="text-info">Book List</h2>
+	</div>
+
+	<div class="col-6 text-right">
+		<a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>&nbsp;Add New Book</a>
+	</div>
+
+</div>
+
+<br />
+
+<div>
+	<table class="table table-striped border">
+		<tr class="table-info">
+			<th>
+				@Html.DisplayNameFor(c => c.Name)
+			</th>
+
+			<th>
+				@Html.DisplayNameFor(c => c.Price)
+			</th>
+
+			<th>
+				@Html.DisplayNameFor(c => c.IsAvailabel)
+			</th>
+
+			<th>
+				@Html.DisplayNameFor(c => c.ProductTypeId)
+			</th>
+
+
+
+
+			<th></th>
+			<th></th>
+
+			@foreach (var item in Model)
+			{
+			<tr>
+				<td>
+						@item.Name
+				</td>
+				<td>
+						@item.Price
+				</td>
+
+				<td>
+						@item.IsAvailabel
+				</td>
+
+				<td>
+						@item.ProductTypes.ProductType
+				</td>
+
+				<td>
+					<partial name="_ButtonPartial" model="@item.Id" />
+				</td>
+			</tr>
+
+
+			}
+		</>
+	</table>
+</div>
+
+@section scripts {
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var msg = '@TempData["alertMsg"]'
+			var Type = '@TempData["type"]'
+			if(Type == "Create" || Type == "update")
+			{
+				alertify.success(msg);
+
+			}
+			else if(Type == "delete"){
+				alertify.error(msg);
+			}
+		})
+	</script>
+}

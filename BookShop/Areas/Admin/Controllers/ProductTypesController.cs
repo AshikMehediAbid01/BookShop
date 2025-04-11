@@ -35,6 +35,8 @@ namespace BookShop.Areas.Admin.Controllers
             {
                 _db.ProductTypes.Add(productTypes);
                 await _db.SaveChangesAsync();
+                TempData["alertMsg"] = "Product Type Created Successfully";
+                TempData["type"] = "Create";
                 return RedirectToAction(nameof(Index));
             }
             return View(productTypes); 
@@ -64,8 +66,11 @@ namespace BookShop.Areas.Admin.Controllers
             {
                 _db.Update(productTypes);
                 await _db.SaveChangesAsync();
+                TempData["alertMsg"] = "Book Type is Updated";
+                TempData["type"] = "update";
                 return RedirectToAction(nameof(Index));
             }
+         
             return View(productTypes);
         }
 
@@ -132,8 +137,11 @@ namespace BookShop.Areas.Admin.Controllers
             {
                 _db.Remove(productType);
                 await _db.SaveChangesAsync();
+                TempData["alertMsg"] = "Book Type is deleted";
+                TempData["type"] = "delete";
                 return RedirectToAction(nameof(Index));
             }
+
             return View(productTypes);
         }
 

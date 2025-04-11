@@ -43,3 +43,21 @@
 		</>
 	</table>
 </div>
+
+@section scripts{
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var msg = '@TempData["alertMsg"]'
+			var Type = '@TempData["type"]'
+			if(Type == "Create" || Type == "update")
+			{
+				alertify.success(msg);
+
+			}
+			else if(Type == "delete"){
+				alertify.error(msg);
+			}
+		})
+	</script>
+}
