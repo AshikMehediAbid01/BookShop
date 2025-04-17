@@ -1,5 +1,7 @@
 ﻿@model BookShop.Models.Products
+
 @{
+
     ViewData["Title"] = "Create";
 }
 
@@ -20,6 +22,17 @@
                 <input asp-for="Name" class="form-control" />
             </div>
             <span asp-validation-for="Name" class="text-danger"> </span>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-2">
+                <label asp-for="Author">Book Author</label>
+            </div>
+
+            <div class="col-5">
+                <input asp-for="Author" class="form-control" />
+            </div>
+            <span asp-validation-for="Author" class="text-danger"> </span>
         </div>
 
 
@@ -52,11 +65,11 @@
 
         <div class="form-group row mb-3">
             <div class="col-2">
-                <label asp-for="ProductTypeId">Book Category Id</label>
+                <label asp-for="ProductTypeId">Book Category</label>
             </div>
 
             <div class="col-5">
-                <select asp-for="ProductTypeId" asp-items="ViewBag.ProductTypeId" class="form-control"></select>
+                <select asp-for="ProductTypeId" asp-items="ViewBag.productTypeId" class="form-control"></select>
 
             </div>
             <span asp-validation-for="ProductTypeId" class="text-danger"> </span>

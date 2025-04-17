@@ -48,4 +48,12 @@ app.MapControllerRoute(
 app.MapRazorPages()
    .WithStaticAssets();
 
+// Create uploads directory if it doesn't exist
+var uploadsDir = Path.Combine(app.Environment.WebRootPath, "Images");
+if (!Directory.Exists(uploadsDir))
+{
+    Directory.CreateDirectory(uploadsDir);
+}
+
+
 app.Run();

@@ -45,6 +45,8 @@
 				@Html.DisplayNameFor(c => c.Name)
 			</th>
 
+			<th>@Html.DisplayNameFor(c => c.Author)</th>
+
 			<th>
 				@Html.DisplayNameFor(c => c.Price)
 			</th>
@@ -66,6 +68,9 @@
 			<tr>
 				<td>
 						@item.Name
+				</td>
+				<td>
+						@item.Author
 				</td>
 				<td>
 						@item.Price
