@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BookShop.Areas.Admin.Controllers;
@@ -20,9 +21,9 @@ public class ProductsController : Controller
         _db = db;
         _he = he;
     }
-    public IActionResult Index()
+    public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList());
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,5));
     }
 
     // POST Index action
