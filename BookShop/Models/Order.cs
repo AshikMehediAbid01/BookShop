@@ -7,17 +7,16 @@ public class Order
     public int Id { get; set; }
     public string OrderNumber { get; set; } = null!;
     [Required]
-    public string? CustomerName { get; set; }
+    public string CustomerName { get; set; }
     [Required]
     [EmailAddress]
-    public string? CustomerEmail { get; set; }
+    public string CustomerEmail { get; set; }
     [Required]
-    public string? CustomerPhone { get; set; }
+    public string CustomerPhone { get; set; }
     [Required]
     [Display(Name = "Address")]
-    public string? CustomerAddress { get; set; }
+    public string CustomerAddress { get; set; }
     public DateTime OrderDate { get; set; }
-    public string? Note { get; set; } 
-
-    public virtual List<OrderDetails> Order_Details { get; set; }
+    public string Note { get; set; } 
+    public virtual List<OrderDetails> Order_Details { get; set; } = new List<OrderDetails>();
 }

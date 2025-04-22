@@ -51,7 +51,7 @@ public class OrderController : Controller
 
         await _db.SaveChangesAsync();
 
-        HttpContext.Session.Set("SelectedBooks", null);
+        HttpContext.Session.Set("SelectedBooks", new List<Products>());
 
         
         return View(customerOrder);
