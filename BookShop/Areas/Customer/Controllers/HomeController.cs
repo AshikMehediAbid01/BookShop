@@ -4,6 +4,7 @@ using BookShop.Models;
 using BookShop.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookShop.Areas.Customer.Controllers;
@@ -23,9 +24,9 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList());
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page ?? 1,8));
     }
 
     public IActionResult Privacy()

@@ -79,7 +79,7 @@ public class ProductsController : Controller
 
             else
             {
-                products.Image = "/Images/NoImageFound.jpg";
+                products.Image = "Images/NoImageFound.jpg";
             }
                 _db.Products.Add(products);
             await _db.SaveChangesAsync();
