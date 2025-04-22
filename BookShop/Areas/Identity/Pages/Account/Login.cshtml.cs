@@ -114,7 +114,17 @@ namespace BookShop.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    if(Input.Email.ToLower() == "rafid@gmail.com" || Input.Email.ToLower() == "ashik@gmail.com")
+                    {
+                        HttpContext.Session.SetString("UserRole", "Admin");
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("UserRole", "User");
+                    }
+
+
+                        _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

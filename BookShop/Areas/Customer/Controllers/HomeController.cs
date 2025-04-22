@@ -2,6 +2,7 @@ using System.Diagnostics;
 using BookShop.Data;
 using BookShop.Models;
 using BookShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList.Extensions;
@@ -62,6 +63,7 @@ public class HomeController : Controller
 
     [HttpPost]
     [ActionName("Details")]
+    [Authorize]
     public IActionResult BookDetails(int? id)
     {
         List<Products> books = new List<Products>();
