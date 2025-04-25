@@ -1,10 +1,12 @@
 ﻿using BookShop.Data;
 using BookShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize]
 public class ProductTypesController : Controller
 {
     private readonly ApplicationDbContext _db;

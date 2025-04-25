@@ -1,11 +1,13 @@
 ﻿using BookShop.Data;
 using BookShop.Models;
 using BookShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookShop.Areas.Customer.Controllers;
 
 [Area("Customer")]
+[Authorize]
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _db;

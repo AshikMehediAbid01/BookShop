@@ -1,6 +1,7 @@
 ﻿using System;
 using BookShop.Data;
 using BookShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace BookShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize]
 public class ProductsController : Controller
 {
     private readonly ApplicationDbContext _db;
