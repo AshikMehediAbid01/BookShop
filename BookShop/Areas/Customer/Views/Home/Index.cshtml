@@ -21,6 +21,7 @@
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        
         @foreach (var book in Model)
         {
             <div class="col">
@@ -40,9 +41,13 @@
                 </div>
             </div>
         }
+        
     </div>
+    
 </div>
 
 <div>
-    @Html.PagedListPager(Model, c=>Href("~/Customer/Home/Index?page="+c)) 
+    @* @Html.PagedListPager(Model, c=>Href("~/Customer/Home/Index?page="+c))  *@
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, categoryId = ViewBag.CategoryId }))
+    
 </div>
