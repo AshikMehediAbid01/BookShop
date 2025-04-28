@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookShop.Models
+namespace BookShop.Models;
+
+public class ProductTypes
 {
-    public class ProductTypes
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required]
-        [Display(Name = "Product Type")]
+    [Required]
+    [Display(Name = "Book Category")]
 
-        public string ProductType { get; set; }
-         
-    }
+    public string ProductType { get; set; }
+     
 }

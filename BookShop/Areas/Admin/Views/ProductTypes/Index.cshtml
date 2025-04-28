@@ -7,11 +7,11 @@
 <br />
 <div class="row">
 	<div class="col-6">
-		<h2 class="text-info">Product Type List</h2>
+		<h2 class="text-info">Book Category List</h2>
 	</div>
 
 	<div class="col-6 text-right">
-		<a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>&nbsp;Add New Product</a>
+		<a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>&nbsp;Add New Category</a>
 	</div>
 
 </div>
@@ -43,3 +43,21 @@
 		</>
 	</table>
 </div>
+
+@section scripts{
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var msg = '@TempData["alertMsg"]'
+			var Type = '@TempData["type"]'
+			if(Type == "Create" || Type == "update")
+			{
+				alertify.success(msg);
+
+			}
+			else if(Type == "delete"){
+				alertify.error(msg);
+			}
+		})
+	</script>
+}
