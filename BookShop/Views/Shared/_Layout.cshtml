@@ -34,6 +34,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
                         @if(UserRole == "Admin")
                         {
                             <li class="nav-item">
@@ -44,12 +48,14 @@
                                 <a class="nav-link text-dark" asp-area="Admin" asp-controller="Products" asp-action="Index">All Books</a>
                             </li>
 
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="OrderProcess" asp-action="Index">Orders</a>
+                            </li>
 
-                        @if (UserRole == "Admin" || UserRole == "User")
+                        }
+
+
+                        @if (UserRole == "User")
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Cart">
