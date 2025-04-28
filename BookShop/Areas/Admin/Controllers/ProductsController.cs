@@ -1,15 +1,18 @@
 ﻿using System;
 using BookShop.Data;
 using BookShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BookShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize]
 public class ProductsController : Controller
 {
     private readonly ApplicationDbContext _db;
@@ -20,9 +23,9 @@ public class ProductsController : Controller
         _db = db;
         _he = he;
     }
-    public IActionResult Index()
+    public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList());
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,5));
     }
 
     // POST Index action
@@ -79,7 +82,7 @@ public class ProductsController : Controller
 
             else
             {
-                products.Image = "/Images/NoImageFound.jpg";
+                products.Image = "Images/NoImageFound.jpg";
             }
                 _db.Products.Add(products);
             await _db.SaveChangesAsync();

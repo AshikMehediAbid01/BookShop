@@ -4,6 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
+using BookShop.Models;
+using BookShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,8 @@ namespace BookShop.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            HttpContext.Session.SetString("UserRole", "");
+            HttpContext.Session.Set("SelectedBooks", new List<Products>());
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

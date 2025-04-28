@@ -1,5 +1,8 @@
 ﻿@using BookShop.Models
-@model IEnumerable<Products>
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+@* @model IEnumerable<Products> *@
+	@model IPagedList<BookShop.Models.Products>
 @{
 	ViewData["Title"] = "Index";
 	//Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -42,21 +45,21 @@
 	<table class="table table-striped border">
 		<tr class="table-info">
 			<th>
-				@Html.DisplayNameFor(c => c.Name)
+				@Html.DisplayNameFor(c => c[0].Name)
 			</th>
 
-			<th>@Html.DisplayNameFor(c => c.Author)</th>
+			<th>@Html.DisplayNameFor(c => c[0].Author)</th>
 
 			<th>
-				@Html.DisplayNameFor(c => c.Price)
-			</th>
-
-			<th>
-				@Html.DisplayNameFor(c => c.IsAvailabel)
+				@Html.DisplayNameFor(c => c[0].Price)
 			</th>
 
 			<th>
-				@Html.DisplayNameFor(c => c.ProductTypeId)
+				@Html.DisplayNameFor(c => c[0].IsAvailabel)
+			</th>
+
+			<th>
+				@Html.DisplayNameFor(c => c[0].ProductTypeId)
 			</th>
 
 
@@ -94,6 +97,11 @@
 		</>
 	</table>
 </div>
+
+<div>
+	@Html.PagedListPager(Model, c => Href("~/Admin/Products/Index?page=" + c))
+</div>
+
 
 @section scripts {
 	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>

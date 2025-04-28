@@ -1,8 +1,12 @@
 using System.Diagnostics;
 using BookShop.Data;
 using BookShop.Models;
+using BookShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookShop.Areas.Customer.Controllers;
 
@@ -11,7 +15,7 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    private ApplicationDbContext _db;
+    private readonly ApplicationDbContext _db;
 
 
 
@@ -21,9 +25,9 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList());
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page ?? 1,8));
     }
 
     public IActionResult Privacy()
@@ -36,4 +40,86 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
+    // Details Action => (Get Method)
+    public IActionResult Details(int? id)
+    {
+        if(id == null)
+        {
+            return NotFound();
+        }
+        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c=>c.Id == id);
+        if(book == null)
+        {
+            return NotFound();
+        }
+        return View(book);
+    }
+
+
+
+    // Details Action => (POST Method)
+
+    [HttpPost]
+    [ActionName("Details")]
+    [Authorize]
+    public IActionResult BookDetails(int? id)
+    {
+        List<Products> books = new List<Products>();
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c => c.Id == id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        books = HttpContext.Session.Get<List<Products>>("SelectedBooks") ?? new List<Products>();
+        books.Add(book);
+
+        HttpContext.Session.Set("SelectedBooks", books);
+        return RedirectToAction("Index");
+    }
+
+    // Remove Action POST  method
+
+    [HttpPost]
+    public IActionResult Remove(int? id)
+    {
+        List<Products>books = HttpContext.Session.Get<List<Products>>("SelectedBooks");
+
+        var book = books.FirstOrDefault(c => c.Id == id);
+
+        books.Remove(book);
+        HttpContext.Session.Set("SelectedBooks", books);
+
+        return RedirectToAction("Index");
+    }
+
+    // Get Method, Cart Action
+
+    public IActionResult Cart()
+    {
+        List<Products> books = HttpContext.Session.Get<List<Products>>("SelectedBooks") ?? new List<Products>();
+        return View(books);
+    }
+
+    // Get Method , Remove from Cart
+    public IActionResult RemoveFromCart(int? id)
+    {
+        List<Products> books = HttpContext.Session.Get<List<Products>>("SelectedBooks");
+
+        var book = books.FirstOrDefault(c => c.Id == id);
+
+        books.Remove(book);
+        HttpContext.Session.Set("SelectedBooks", books);
+
+        return RedirectToAction(nameof(Cart));
+    }
+
+
 }

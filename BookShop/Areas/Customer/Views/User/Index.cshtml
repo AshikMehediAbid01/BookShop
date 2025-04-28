@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h3>Index</h3>
+
+@section scripts {
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var msg = '@TempData["alertMsg"]'
+			var Type = '@TempData["type"]'
+			if(Type == "Create" || Type == "update")
+			{
+				alertify.success(msg);
+
+			}
+			else if(Type == "delete"){
+				alertify.error(msg);
+			}
+		})
+	</script>
+}

@@ -9,7 +9,7 @@ namespace BookShop.Areas.Customer.Controllers;
 
 public class UserController : Controller
 {
-    UserManager<IdentityUser> _userManager;
+    private readonly UserManager<IdentityUser> _userManager;
     public UserController(UserManager<IdentityUser> userManager)
     {
         _userManager = userManager;
@@ -20,12 +20,35 @@ public class UserController : Controller
         return View();
     }
 
-    public async Task<IActionResult>Create()
+    public IActionResult Create()
     {
         return View();
     }
 
+    [HttpPost]
 
+    public async Task<IActionResult>Create(ApplicationUser user)
+    {
+        if(ModelState.IsValid)
+        {
+            var result = await _userManager.CreateAsync(user, user.PasswordHash);
+
+            if (result.Succeeded)
+            {
+                TempData["type"] = "Create";
+                TempData["alertMsg"] = "New Account Created";
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+        
+
+        return View();
+    }
 
 
 
