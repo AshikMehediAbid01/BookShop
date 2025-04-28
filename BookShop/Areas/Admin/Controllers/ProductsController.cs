@@ -25,7 +25,7 @@ public class ProductsController : Controller
     }
     public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,5));
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,10));
     }
 
     // POST Index action
