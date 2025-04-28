@@ -8,6 +8,17 @@
 
 <br />
 
+<div>
+    <a asp-action="Index" asp-route-categoryId= 0 class="btn @(ViewBag.CategoryId == 0 ? "btn-dark" : "btn-outline-dark")">All</a>
+    @foreach(var category in ViewBag.ProductTypes)
+    {
+        <a asp-action="Index" asp-route-categoryId="@category.Id" class="btn @(ViewBag.CategoryId == category.Id ? "btn-dark" : "btn-outline-dark")">@category.ProductType</a>
+        
+    }
+</div>
+
+<br /><br />
+
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var book in Model)
