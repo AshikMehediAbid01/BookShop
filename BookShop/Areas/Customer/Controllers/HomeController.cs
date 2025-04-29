@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using BookShop.Data;
 using BookShop.Models;
 using BookShop.Utility;
@@ -132,5 +133,18 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Cart));
     }
 
+    public IActionResult MyOrders()
+    {
+        var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+        var orders = _db.Orders
+     .Include(o => o.Order_Details)
+     .ThenInclude(od => od.Book)
+     .Where(o => o.CustomerEmail == userEmail)
+     .OrderByDescending(o => o.OrderDate)
+     .ToList();
+
+        return View(orders);
+    }
 
 }
