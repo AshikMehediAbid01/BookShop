@@ -49,6 +49,7 @@ public class OrderController : Controller
             }
         }
         customerOrder.OrderNumber = GetOrderNo();
+        customerOrder.UserId = User.Identity?.Name;
         _db.Orders.Add(customerOrder);
 
         await _db.SaveChangesAsync();
@@ -56,7 +57,7 @@ public class OrderController : Controller
         HttpContext.Session.Set("SelectedBooks", new List<Products>());
 
         
-        return View(customerOrder);
+        return RedirectToAction("Index", "Home");
     }
 
     public string GetOrderNo()
