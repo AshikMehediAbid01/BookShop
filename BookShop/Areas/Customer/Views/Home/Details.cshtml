@@ -15,7 +15,7 @@
     {
         isSelected = books.FirstOrDefault(c => c.Id == Model.Id);
     }
-
+    var UserRole = HttpContextAccessor.HttpContext?.Session.GetString("UserRole");
 }
 
 <h2 class="text-info">Book details</h2>
@@ -97,19 +97,43 @@
                     {
                         <h4 class="text-danger">Not Available</h4>
                     }
-
-                    @if(isSelected == null)
+                    @if(UserRole == "User")
                     {
-                        <button type="submit"  asp-route-id="@Model.Id" class="btn btn-success form-control">
-                            <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
-                        </button>
+                        @if (isSelected == null)
+                        {
+                            @if (Model.IsAvailabel == true)
+                            {
+                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control">
+                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control" disabled>
+                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                </button>
+                            }
+
+
+                        }
+                        else
+                        {
+                            <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
+                                <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
+                            </button>
+                        }
                     }
+
                     else
                     {
-                        <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
-                            <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
-                        </button>
+                        
+                        <a asp-action="Edit" asp-area="Admin" asp-controller="Products" class="btn btn-success btn-sm" asp-route-id="@Model.Id">Edit</a>
+                  
+                        <a asp-action="Delete" asp-area="Admin" asp-controller="Products" class="btn btn-danger btn-sm" asp-route-id="@Model.Id">Delete</a>
+
                     }
+
+
 
                 </div>
                 
