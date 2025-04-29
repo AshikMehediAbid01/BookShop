@@ -56,7 +56,7 @@ public class OrderController : Controller
         HttpContext.Session.Set("SelectedBooks", new List<Products>());
 
         
-        return View(customerOrder);
+        return RedirectToAction("Index", "Home");
     }
 
     public string GetOrderNo()

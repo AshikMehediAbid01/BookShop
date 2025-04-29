@@ -5,7 +5,7 @@
 	@model IPagedList<BookShop.Models.Products>
 @{
 	ViewData["Title"] = "Index";
-	//Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 
@@ -20,24 +20,6 @@
 	</div>
 
 </div>
-
-<form method="post">
-	<div class="row">
-		<div class="col-2">
-	
-			<input type="number" class="form-control" name="lowPrice" placeholder="Low Price" />
-		</div>
-		<div class="col-2">
-	
-			<input type="number" class="form-control" name="highPrice" placeholder="High Price"/>
-		</div>
-		<div class="col-2">
-			<label></label>
-			<input type="submit" value="Search" class="btn btn-primary"/>
-		</div>
-		<div class="col-3"></div>
-	</div>
-</form>
 
 <br />
 
@@ -68,19 +50,28 @@
 
 			@foreach (var item in Model)
 			{
-			<tr>
-				<td>
+				<tr>
+					<td>
 						@item.Name
-				</td>
-				<td>
+					</td>
+					<td>
 						@item.Author
-				</td>
-				<td>
+					</td>
+					<td>
 						@item.Price
-				</td>
+					</td>
 
-				<td>
-						@item.IsAvailabel
+					<td>
+						
+						@if (@item.IsAvailabel == true)
+						{
+							<text>YES</text>
+						}
+						else
+						{
+							<text>NO</text>
+						}
+
 				</td>
 
 				<td>
@@ -100,6 +91,7 @@
 
 <div>
 	@Html.PagedListPager(Model, c => Href("~/Admin/Products/Index?page=" + c))
+	
 </div>
 
 

@@ -25,22 +25,8 @@ public class ProductsController : Controller
     }
     public IActionResult Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,5));
+        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,10));
     }
-
-    // POST Index action
-    [HttpPost]
-    public IActionResult Index(int? lowPrice, int? highPrice)
-    {
-        var book = _db.Products.Include(c=> c.ProductTypes).Where(c=> c.Price >= lowPrice && c.Price <= highPrice).ToList();
-
-        if(lowPrice == null || highPrice == null)
-        {
-            book = _db.Products.Include(c => c.ProductTypes).ToList();
-        }
-        return View(book);
-    }
-
 
     // GET Method Create Action
     public IActionResult Create()

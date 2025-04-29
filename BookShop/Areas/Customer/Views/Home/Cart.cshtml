@@ -56,8 +56,11 @@
 		</a>
 	</div>
 	<div class="col-6 text-end">
-		<a asp-action="CheckOut" asp-controller="Order" asp-area="Customer" class="btn btn-primary ">
-			<i class="fa-solid fa-credit-card"></i> Checkout
-		</a>
+		@if (@Model.Sum(c => c.Price)!=0)
+		{
+			<a asp-action="CheckOut" asp-controller="Order" asp-area="Customer" class="btn btn-primary ">
+				<i class="fa-solid fa-credit-card"></i> Checkout
+			</a>
+		}
 	</div>
 </div>
