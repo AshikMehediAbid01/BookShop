@@ -2,6 +2,7 @@
 
 namespace BookShop.Models;
 
+
 public class Order
 {
     public int Id { get; set; }
@@ -20,4 +21,7 @@ public class Order
     public string? Note { get; set; } 
     public int TotalPrice { get; set; }
     public virtual List<OrderDetails> Order_Details { get; set; } = new List<OrderDetails>();
+
+    [Display(Name = "Status")]
+    public String? Status { get; set; } = "Pending";
 }

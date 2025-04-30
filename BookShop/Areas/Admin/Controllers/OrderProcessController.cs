@@ -1,4 +1,5 @@
 ﻿using BookShop.Data;
+using BookShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,20 @@ public class OrderProcessController : Controller
         _db.Orders.Remove(order);
         await _db.SaveChangesAsync();
 
+        return RedirectToAction(nameof(Index));
+    }
+
+    // Update Order Status
+    [HttpPost]
+    public async Task<IActionResult> UpdateOrderStatus(int id, string status)
+    {
+        var order = await _db.Orders.FindAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+        order.Status = status;
+        await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 

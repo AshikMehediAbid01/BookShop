@@ -18,6 +18,7 @@ else
                 <th>Order No</th>
                 <th>Ordered Date</th>
                 <th>Total price</th>
+                <th>Order Status</th>
                 <th>Orders</th>
             </tr>
         </thead>
@@ -28,12 +29,31 @@ else
                     <td>@order.Id</td>
                     <td>@order.OrderDate</td>
                     <td>@order.TotalPrice</td>
+
+                    @if (order.Status == "Pending")
+                    {
+                        <td class="text-danger">@order.Status</td>
+                    }
+                    else if (order.Status == "InProcess")
+                    {
+                        <td class="text-warning">@order.Status</td>
+                    }
+                    else if (order.Status == "Shipped")
+                    {
+                        <td class="text-info">@order.Status</td>
+                    }
+                    else
+                    {
+                        <td class="text-success">@order.Status</td>
+                    }
                     <td>
+                        
                         <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Book</th>
                                         <th>Price</th>
+                                        
                                     </tr>
                                 </thead>
 
@@ -47,11 +67,14 @@ else
                                     }
                                 </tbody>
                             </table>
+                           
                             
                      
                     </td>
                 </tr>
+  
             }
+           
         </tbody>
     </table>
 }

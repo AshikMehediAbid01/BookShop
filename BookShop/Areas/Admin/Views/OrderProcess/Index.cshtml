@@ -13,6 +13,8 @@
             <th>Customer</th>
             <th>Date</th>
             <th>Total Price</th>
+            <th>Status</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -24,7 +26,41 @@
                 <td>@order.CustomerName</td>
                 <td>@order.OrderDate.ToShortDateString()</td>
                 <td>@order.TotalPrice</td>
-                <td style="width:150px">
+                
+
+                @if(order.Status == "Pending")
+                {
+                    <td class="text-danger">@order.Status</td>
+                }
+                else if (order.Status == "InProcess")
+                {
+                    <td class="text-warning">@order.Status</td>
+                }
+                else if (order.Status == "Shipped")
+                {
+                    <td class="text-info">@order.Status</td>
+                }
+                else
+                {
+                    <td class="text-success">@order.Status</td>
+                }
+
+
+                <td>
+                    <form asp-action="UpdateOrderStatus" method="post">
+                        <input type="hidden" name="id" value="@order.Id" />
+                        <select name="status" class="form-select form-select-sm d-inline" style="width:auto;">
+                            <option value="Pending" selected="@(order.Status == "Pending" ? "selected" : null )">Pending</option>
+                            <option value="InProcess" selected="@(order.Status == "InProcess" ? "selected" : null )">InProcess</option>
+                            <option value="Shipped" selected="@(order.Status == "Shipped" ? "selected" : null )">Shipped</option>
+                            <option value="Delivered" selected="@(order.Status == "Delivered" ? "selected" : null )">Delivered</option>
+                        </select>
+                        <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                    </form>
+                </td>
+
+                <td width="150">
+
                     <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info btn-sm">Details</a>
                     <a asp-action="Delete" asp-route-id="@order.Id" class="btn btn-danger btn-sm">Delete</a>
                 </td>
