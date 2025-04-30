@@ -21,7 +21,7 @@ public class OrderProcessController : Controller
     // View All Orders
     public IActionResult Index()
     {
-        var orders = _db.Orders.ToList();
+        var orders = _db.Orders.OrderByDescending(o => o.Id).ToList();
 
         return View(orders);
     }
@@ -75,7 +75,6 @@ public class OrderProcessController : Controller
             return NotFound();
         }
             
-
         _db.OrderDetails.RemoveRange(order.Order_Details);
         _db.Orders.Remove(order);
         await _db.SaveChangesAsync();
