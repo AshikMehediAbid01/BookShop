@@ -1,0 +1,49 @@
+﻿@model BookShop.Models.Order
+@{
+    ViewData["title"] = "Customer Order Details";
+}
+
+<br />
+<h2 class="text-info">Order Details</h2>
+<br />
+<div class="row">
+    <div class="col-6">
+        <p><strong>Order No: </strong>@Model.Id</p>
+        <p><strong>Customer:</strong> @Model.CustomerName</p>
+        <p><strong>Email:</strong> @Model.CustomerEmail</p>
+        <p><strong>Phone:</strong> @Model.CustomerPhone</p>
+        <p><strong>Address:</strong> @Model.CustomerAddress</p>
+        <p><strong>Total Price:</strong> @Model.TotalPrice</p>
+        <p><strong>Note:</strong> @Model.Note</p>
+    </div>
+
+    <div class="col-6">
+        <h4>Books Ordered</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                }
+                @foreach (var item in Model.Order_Details)
+                {
+                    <tr>
+                        <td>@count. @item.Book.Name</td>
+                    </tr>
+                    
+                    count++;
+                    
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
