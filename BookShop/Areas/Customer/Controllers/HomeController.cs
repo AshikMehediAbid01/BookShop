@@ -66,6 +66,9 @@ public class HomeController : Controller
         {
             return NotFound();
         }
+
+        ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id);
+
         return View(book);
     }
 
@@ -146,5 +149,23 @@ public class HomeController : Controller
 
         return View(orders);
     }
+
+
+    // Add reviews
+
+    public IActionResult Review(int? id)
+    {
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddReview(int id, Reviews? review)
+    {
+        review.UserEmail = User.FindFirstValue(ClaimTypes.Email);
+        review.BookId = id;
+        _db.Reviews.Add(review);
+        await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
 
 }

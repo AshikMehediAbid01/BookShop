@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using BookShop.Data;
 using BookShop.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -143,6 +144,9 @@ public class ProductsController : Controller
         {
             return NotFound();
         }
+
+        
+
         return View(book);
     }
 
@@ -189,5 +193,9 @@ public class ProductsController : Controller
 
 
     }
+
+
+
+
 
 }

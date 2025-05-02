@@ -18,145 +18,174 @@
     var UserRole = HttpContextAccessor.HttpContext?.Session.GetString("UserRole");
 }
 
-<h2 class="text-info">Book details</h2>
-<form asp-action="" method="post" enctype="multipart/form-data">
-    <div class="p-4 rounded border row">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
-        </div>
-
-        <div class="col-8">
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Name">Book Name</label>
-                </div>
-                <div class="col-8">
-                    <input type="hidden" asp-for="Id" />
-                    <input asp-for="Name" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Name" class="text-danger"> </span>
+<div>
+    <h2 class="text-info">Book details</h2>
+    <form asp-action="" method="post" enctype="multipart/form-data">
+        <div class="p-4 rounded border row">
+            <div asp-validation-summary="ModelOnly" class="text-danger">
             </div>
 
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Author">Book Author</label>
-                </div>
-                <div class="col-8">
-                    <input type="hidden" asp-for="Id" />
-                    <input asp-for="Author" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Author" class="text-danger"> </span>
-            </div>
-
-
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Price">Price</label>
+            <div class="col-8">
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Name">Book Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="hidden" asp-for="Id" />
+                        <input asp-for="Name" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
-                    <input asp-for="Price" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Price" class="text-danger"> </span>
-            </div>
-
-
-
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="ProductTypes.ProductType">Book Category</label>
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Author">Book Author</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="hidden" asp-for="Id" />
+                        <input asp-for="Author" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Author" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
-                    <input asp-for="ProductTypes.ProductType" class="alert-danger" readonly="readonly" />
 
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Price">Price</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input asp-for="Price" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"> </span>
                 </div>
-                <span asp-validation-for="ProductTypes.ProductType" class="text-danger"> </span>
-            </div>
 
 
 
 
-            <div class="form-group row mb-3">
-                <div class="col-4">
 
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="ProductTypes.ProductType">Book Category</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input asp-for="ProductTypes.ProductType" class="alert-danger" readonly="readonly" />
+
+                    </div>
+                    <span asp-validation-for="ProductTypes.ProductType" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
 
-                    @if (Model.IsAvailabel == true)
-                    {
-                        <h4 class="text-success">In stock</h4>
-                    }
-                    else
-                    {
-                        <h4 class="text-danger">Not Available</h4>
-                    }
-                    @if(UserRole != "Admin")
-                    {
-                        @if (isSelected == null)
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                    </div>
+
+                    <div class="col-8">
+
+                        @if (Model.IsAvailabel == true)
                         {
-                            @if (Model.IsAvailabel == true)
-                            {
-                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control">
-                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control" disabled>
-                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
-                                </button>
-                            }
-
-
+                            <h4 class="text-success">In stock</h4>
                         }
                         else
                         {
-                            <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
-                                <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
-                            </button>
+                            <h4 class="text-danger">Not Available</h4>
                         }
-                    }
+                        @if (UserRole != "Admin")
+                        {
+                            @if (isSelected == null)
+                            {
+                                @if (Model.IsAvailabel == true)
+                                {
+                                    <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control">
+                                        <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control" disabled>
+                                        <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                    </button>
+                                }
 
-                    else
-                    {
-                        
-                        <a asp-action="Edit" asp-area="Admin" asp-controller="Products" class="btn btn-success btn-sm" asp-route-id="@Model.Id">Edit</a>
-                  
-                        <a asp-action="Delete" asp-area="Admin" asp-controller="Products" class="btn btn-danger btn-sm" asp-route-id="@Model.Id">Delete</a>
 
-                    }
+                            }
+                            else
+                            {
+                                <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
+                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
+                                </button>
+                            }
+                        }
+
+                        else
+                        {
+
+                            <a asp-action="Edit" asp-area="Admin" asp-controller="Products" class="btn btn-success btn-sm" asp-route-id="@Model.Id">Edit</a>
+
+                            <a asp-action="Delete" asp-area="Admin" asp-controller="Products" class="btn btn-danger btn-sm" asp-route-id="@Model.Id">Delete</a>
+
+                        }
 
 
+
+                    </div>
 
                 </div>
-                
-            </div> 
 
-            <br />
-            <div class="form-group">
-               
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
-                
+                <br />
+                <div class="form-group">
+
+                    <a asp-action="Index" class="btn btn-success">Back to List</a>
+
+                </div>
+
             </div>
 
+            <div class="col-1"></div>
+
+            <div class="col-3">
+                <img src="/@Model.Image" width="100%" />
+            </div>
+
+
+
         </div>
+    </form>
+</div>
 
-        <div class="col-1"></div>
+<div>
+    <h2 class="text-info">Reviews and Ratings</h2>
+    <form>
+        <div>
 
-        <div class="col-3">
-            <img src="/@Model.Image" width="100%" />
+            <div>
+                <a asp-action="Review" asp-controller="Home" asp-area="Customer" asp-route-id="@Model.Id" class="btn btn-primary">Add review</a>
+            </div>
+
+
+
+
+            <div class="form-group row mb-3">
+                <div class="col-4">
+                    @*                 <label asp-for="CustomerPhone">Phone</label> *@
+                </div>
+
+                <div class="col-8">
+                    @*                 <input asp-for="CustomerPhone" class="form-control" required />
+                <span asp-validation-for="CustomerPhone" class="text-danger"> </span> *@
+                </div>
+            </div>
         </div>
+        <div>
+        </div>
+    </form>
 
-
-
-    </div>
-</form>
-
+</div>
 
 @section Scripts {
     @{
