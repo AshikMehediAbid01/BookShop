@@ -68,7 +68,16 @@ public class HomeController : Controller
         {
             return NotFound();
         }
-
+        
+        ViewBag.TotalReview = _db.Reviews.Count(c => c.BookId == id);
+        if(ViewBag.TotalReview == 0)
+        {
+            ViewBag.AvgRating = 0;
+        }
+        else
+        {
+            ViewBag.AvgRating = _db.Reviews.Where(c => c.BookId == id).Average(r => (double)r.Rating);
+        }
         ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id).ToList();
 
         return View(book);
@@ -173,24 +182,26 @@ public class HomeController : Controller
     [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Review(int id , int rating, string? review)
+    public async Task<IActionResult> Review(int id, int rating, string? review)
     {
-        var Bookreview = new Reviews();
-        Bookreview.BookId = id;
-        Bookreview.UserEmail = User.FindFirstValue(ClaimTypes.Email);
-        Bookreview.Created_at = DateTime.Now;
-        Bookreview.Rating = rating;  
-        Bookreview.Review = review;
+        var Bookreview = new Reviews
+        {
+            BookId = id,
+            UserEmail = User.FindFirstValue(ClaimTypes.Email),
+            Created_at = DateTime.Now,
+            Rating = rating,
+            Review = review 
+        };
 
         if (!ModelState.IsValid)
         {
-            return View("Review", review); 
+            return View("Review", review);
         }
-
 
         _db.Reviews.Add(Bookreview);
         await _db.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+
+        return RedirectToAction(nameof(Details), new{id = id});
     }
 
 

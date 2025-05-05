@@ -10,7 +10,7 @@
     List<Products> books = HttpContextAccessor.HttpContext?.Session.Get<List<Products>>("SelectedBooks") ?? new List<Products>();
 }
       
-<h2 class="text-info">Order details</h2>
+<h2>Order details</h2>
 
 
 <form asp-action="CheckOut" method="post" enctype="multipart/form-data">

@@ -4,7 +4,8 @@
 	ViewData["Title"] = "Add Review";
 }
 
-
+<h3>Add Review</h3>
+<br />
 <form asp-action="Review" method="post">
     @Html.AntiForgeryToken()
     <input name="id" value="@Model.BookId"  type="hidden" />

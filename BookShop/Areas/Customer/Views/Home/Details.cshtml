@@ -19,7 +19,7 @@
 }
 
 <div>
-    <h2 class="text-info">Book details</h2>
+    <h2>Book details</h2>
     <form asp-action="" method="post" enctype="multipart/form-data">
         <div class="p-4 rounded border row">
             <div asp-validation-summary="ModelOnly" class="text-danger">
@@ -33,6 +33,7 @@
                     <div class="col-8">
                         <input type="hidden" asp-for="Id" />
                         <input asp-for="Name" class="form-control" readonly="readonly" />
+
                     </div>
                     <span asp-validation-for="Name" class="text-danger"> </span>
                 </div>
@@ -149,7 +150,7 @@
             <div class="col-1"></div>
 
             <div class="col-3">
-                <img src="/@Model.Image" width="100%" />
+                <img src="/@Model.Image" width="80%" />
             </div>
 
 
@@ -158,8 +159,35 @@
     </form>
 </div>
 
-<div>
-    <h2 class="text-info">Reviews and Ratings</h2>
+<div class="mt-4">
+    <div class="row">
+        <div class="col-6 mb-3"><h2>Reviews and Ratings</h2></div>
+
+        @if (@ViewBag.TotalReview !=0)
+        {
+            <div class="col-6">
+                <h3 class="text-end">
+                    @* @ViewBag.AvgRating *@
+                    @for (int i = 0; i < (int)@ViewBag.AvgRating; i++)
+                    {
+                        <i class="fa fa-star text-warning"></i>
+                    }
+                    @if (ViewBag.AvgRating % 1 != 0)
+                    {
+                        <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                    }
+                    @for (int i = (int)Math.Ceiling((double)@ViewBag.AvgRating); i < 5; i++)
+                    {
+                        <i class="fa fa-star text-secondary"></i>
+                    }
+
+                    <span>(@ViewBag.TotalReview)</span>
+                </h3>
+            </div>
+        }
+
+    </div>
+    
 
     <div class="mb-3">
         <a asp-action="Review" asp-controller="Home" asp-area="Customer" asp-route-id="@Model.Id" class="btn btn-primary">
