@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using BookShop.Data;
 using BookShop.Models;
@@ -12,6 +13,7 @@ using static System.Reflection.Metadata.BlobBuilder;
 namespace BookShop.Areas.Customer.Controllers;
 
 [Area("Customer")]
+
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -67,7 +69,7 @@ public class HomeController : Controller
             return NotFound();
         }
 
-        ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id);
+        ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id).ToList();
 
         return View(book);
     }
@@ -152,20 +154,46 @@ public class HomeController : Controller
 
 
     // Add reviews
-
+    [Authorize]
     public IActionResult Review(int? id)
     {
-        return View();
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var model = new Reviews
+        {
+            BookId = id ?? 0
+        };
+
+        return View(model); 
     }
+
+    [Authorize]
     [HttpPost]
-    public async Task<IActionResult> AddReview(int id, Reviews? review)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Review(int id , int rating, string? review)
     {
-        review.UserEmail = User.FindFirstValue(ClaimTypes.Email);
-        review.BookId = id;
-        _db.Reviews.Add(review);
+        var Bookreview = new Reviews();
+        Bookreview.BookId = id;
+        Bookreview.UserEmail = User.FindFirstValue(ClaimTypes.Email);
+        Bookreview.Created_at = DateTime.Now;
+        Bookreview.Rating = rating;  
+        Bookreview.Review = review;
+
+        if (!ModelState.IsValid)
+        {
+            return View("Review", review); 
+        }
+
+
+        _db.Reviews.Add(Bookreview);
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+
+
 
 
 }

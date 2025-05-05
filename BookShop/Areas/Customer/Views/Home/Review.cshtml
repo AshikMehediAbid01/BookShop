@@ -1,21 +1,41 @@
-﻿@using BookShop.Models
+﻿
 @model Reviews
 @{
 	ViewData["Title"] = "Add Review";
 }
 
 
-<form asp-action="AddReview" method="Post">
-    <input type="hidden" name="id" value="@Model.BookId" />
-    <select name="rating" class="form-select form-select-sm d-inline" style="width:auto;">
-        <option value="0">-- select rating --</option>
-        <option value="1">1 star</option>
-        <option value="2">2 star</option>
-        <option value="3" >3 star</option>
-        <option value="4">4 star</option>
-        <option value="5">5 star</option>
-    </select>
+<form asp-action="Review" method="post">
+    @Html.AntiForgeryToken()
+    <input name="id" value="@Model.BookId"  type="hidden" />
 
-	<textarea name="review" class="form-control" rows="3" placeholder="Write your review here... (Optional)"></textarea>
-    <button type="submit" class="btn btn-warning btn-sm">Update</button>
+    <div class="mb-3">
+        <label>Rating</label>
+        <select name="rating" class="form-select form-select-sm d-inline" style="width:auto;" required>
+            <option value="">-- select rating --</option>
+            <option value="1">★</option>
+            <option value="2">★★</option>
+            <option value="3">★★★</option>
+            <option value="4">★★★★</option>
+            <option value="5">★★★★★</option>
+        </select>
+        
+    </div>
+
+
+    <div>
+        <label class="mb-2">Review</label>
+        <textarea name="review" class="form-control" rows="3" placeholder="Write your review here... (Optional)"></textarea>
+       
+
+    </div>
+
+  
+    <button type="submit" class="btn btn-warning btn-sm mt-3">Update</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

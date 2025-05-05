@@ -160,32 +160,44 @@
 
 <div>
     <h2 class="text-info">Reviews and Ratings</h2>
-    <form>
-        <div>
 
-            <div>
-                <a asp-action="Review" asp-controller="Home" asp-area="Customer" asp-route-id="@Model.Id" class="btn btn-primary">Add review</a>
-            </div>
+    <div class="mb-3">
+        <a asp-action="Review" asp-controller="Home" asp-area="Customer" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Add Review
+        </a>
+    </div>
 
+    @if (ViewBag.reviews != null && ViewBag.reviews.Count > 0)
+    {
+        @foreach (var review in ViewBag.reviews)
+        {
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
 
+                    <h6 class="mb-0"><i class="fa-solid fa-circle-user"></i> @review.UserEmail</h6>
+                        <div>
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <i class="fa fa-star text-warning"></i>
+                            }
+                            @for (int i = review.Rating; i < 5; i++)
+                            {
+                                <i class="fa fa-star text-secondary"></i>
+                            }
+                        </div>
 
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    @*                 <label asp-for="CustomerPhone">Phone</label> *@
+                        <p class="text-muted mb-0">@review.Review</p>
+                    
                 </div>
-
-                <div class="col-8">
-                    @*                 <input asp-for="CustomerPhone" class="form-control" required />
-                <span asp-validation-for="CustomerPhone" class="text-danger"> </span> *@
-                </div>
             </div>
-        </div>
-        <div>
-        </div>
-    </form>
-
+        }
+    }
+    else
+    {
+        <p class="text-muted">No reviews yet. Be the first to leave one!</p>
+    }
 </div>
+
 
 @section Scripts {
     @{
