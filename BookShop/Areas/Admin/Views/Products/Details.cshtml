@@ -1,99 +1,96 @@
 ﻿@model BookShop.Models.Products
+
 @{
     ViewData["Title"] = "Details";
 }
 
 <h2 class="text-info">Book details</h2>
-<form asp-action="" method="post" enctype="multipart/form-data">
-    <div class="p-4 rounded border row">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
+
+    <form asp-action="" method="post" enctype="multipart/form-data">
+        <div class="p-4 rounded border row">
+            <div asp-validation-summary="ModelOnly" class="text-danger">
+            </div>
+
+            <div class="col-8">
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Name">Book Name</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input type="hidden" asp-for="Id" />
+                        <input asp-for="Name" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"> </span>
+                </div>
+
+
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Price">Price</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input asp-for="Price" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"> </span>
+                </div>
+
+
+
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="ProductTypeId">Book Category Id</label>
+                    </div>
+
+                    <div class="col-8">
+                        @* <select asp-for="ProductTypeId" asp-items="ViewBag.ProductTypeId" class="form-control"></select> *@
+
+                        <input asp-for="ProductTypeId" class="alert-danger" readonly="readonly" />
+
+                    </div>
+                    <span asp-validation-for="ProductTypeId" class="text-danger"> </span>
+                </div>
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="IsAvailabel">Is Available</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input asp-for="IsAvailabel" class="" type="checkbox" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="IsAvailabel" class="text-danger"> </span>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary" readonly="readonly">Edit</a>
+                    <a asp-action="Index" class="btn btn-success">Back to List</a>
+                </div>
+
+            </div>
+
+            <div class="col-1"></div>
+
+            <div class="col-3">
+                <img src="/@Model.Image" width="100%" />
+            </div>
+
+
+
         </div>
-
-        <div class="col-8">
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Name">Book Name</label>
-                </div>
-
-                <div class="col-8">
-                    <input type="hidden" asp-for="Id" />
-                    <input asp-for="Name" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Name" class="text-danger"> </span>
-            </div>
-
-
-            @* <div class="form-group row mb-3"> *@
-            @*     <div class="col-4"> *@
-            @*         <label asp-for="Image">Image</label> *@
-            @*     </div> *@
-
-            @*     <div class="col-8"> *@
-            @*         <input asp-for="Image" class="form-control" type="file" readonly="readonly" /> *@
-            @*     </div> *@
-
-            @* </div> *@
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Price">Price</label>
-                </div>
-
-                <div class="col-8">
-                    <input asp-for="Price" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Price" class="text-danger"> </span>
-            </div>
+    </form>
 
 
 
 
 
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="ProductTypeId">Book Category Id</label>
-                </div>
-
-                <div class="col-8">
-                    @* <select asp-for="ProductTypeId" asp-items="ViewBag.ProductTypeId" class="form-control"></select> *@
-
-                    <input asp-for="ProductTypeId" class="alert-danger" readonly="readonly" />
-
-                </div>
-                <span asp-validation-for="ProductTypeId" class="text-danger"> </span>
-            </div>
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="IsAvailabel">Is Available</label>
-                </div>
-
-                <div class="col-8">
-                    <input asp-for="IsAvailabel" class="" type="checkbox" readonly="readonly" />
-                </div>
-                <span asp-validation-for="IsAvailabel" class="text-danger"> </span>
-            </div>
-
-            <br />
-            <div class="form-group">
-                <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary" readonly="readonly">Edit</a>
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
-            </div>
-
-        </div>
-
-        <div class="col-1"></div>
-
-        <div class="col-3">
-            <img src="/@Model.Image" width="100%" />
-        </div>
-
-
-
-    </div>
-</form>
 
 
 @section Scripts {
