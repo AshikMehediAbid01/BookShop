@@ -199,10 +199,10 @@
     {
         @foreach (var review in ViewBag.reviews)
         {
-            <div class="card shadow-sm mb-3">
+            <div class="card  mb-3">
                 <div class="card-body">
 
-                    <h6 class="mb-0"><i class="fa-solid fa-circle-user"></i> @review.UserEmail</h6>
+                    <p class="mb-0"><i class="fa-solid fa-circle-user fa-2x text-secondary"></i><span><i> by </i><b>@review.UserEmail, </b><span class="text-secondary" style="font-size: 0.9em;">@review.Created_at </span> </span></p>
                         <div>
                             @for (int i = 0; i < review.Rating; i++)
                             {

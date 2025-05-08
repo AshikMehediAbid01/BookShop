@@ -40,14 +40,9 @@ public class HomeController : Controller
         else
         {
             return View(_db.Products.ToList().ToPagedList(page ?? 1, 8));
-
         }
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
@@ -79,6 +74,7 @@ public class HomeController : Controller
             ViewBag.AvgRating = _db.Reviews.Where(c => c.BookId == id).Average(r => (double)r.Rating);
         }
         ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id).ToList();
+        
 
         return View(book);
     }
