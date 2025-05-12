@@ -18,146 +18,219 @@
     var UserRole = HttpContextAccessor.HttpContext?.Session.GetString("UserRole");
 }
 
-<h2 class="text-info">Book details</h2>
-<form asp-action="" method="post" enctype="multipart/form-data">
-    <div class="p-4 rounded border row">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
-        </div>
-
-        <div class="col-8">
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Name">Book Name</label>
-                </div>
-                <div class="col-8">
-                    <input type="hidden" asp-for="Id" />
-                    <input asp-for="Name" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Name" class="text-danger"> </span>
+<div>
+    <h2>Book details</h2>
+    <form asp-action="" method="post" enctype="multipart/form-data">
+        <div class="p-4 rounded border row">
+            <div asp-validation-summary="ModelOnly" class="text-danger">
             </div>
 
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Author">Book Author</label>
-                </div>
-                <div class="col-8">
-                    <input type="hidden" asp-for="Id" />
-                    <input asp-for="Author" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Author" class="text-danger"> </span>
-            </div>
+            <div class="col-8">
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Name">Book Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="hidden" asp-for="Id" />
+                        <input asp-for="Name" class="form-control" readonly="readonly" />
 
-
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="Price">Price</label>
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
-                    <input asp-for="Price" class="form-control" readonly="readonly" />
-                </div>
-                <span asp-validation-for="Price" class="text-danger"> </span>
-            </div>
-
-
-
-
-
-            <div class="form-group row mb-3">
-                <div class="col-4">
-                    <label asp-for="ProductTypes.ProductType">Book Category</label>
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Author">Book Author</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="hidden" asp-for="Id" />
+                        <input asp-for="Author" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Author" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
-                    @* <select asp-for="ProductTypeId" asp-items="ViewBag.ProductTypeId" class="form-control"></select> *@
-
-                    <input asp-for="ProductTypes.ProductType" class="alert-danger" readonly="readonly" />
-
-                </div>
-                <span asp-validation-for="ProductTypes.ProductType" class="text-danger"> </span>
-            </div>
 
 
 
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="Price">Price</label>
+                    </div>
 
-            <div class="form-group row mb-3">
-                <div class="col-4">
-
+                    <div class="col-8">
+                        <input asp-for="Price" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"> </span>
                 </div>
 
-                <div class="col-8">
 
-                    @if (Model.IsAvailabel == true)
-                    {
-                        <h4 class="text-success">In stock</h4>
-                    }
-                    else
-                    {
-                        <h4 class="text-danger">Not Available</h4>
-                    }
-                    @if(UserRole != "Admin")
-                    {
-                        @if (isSelected == null)
+
+
+
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                        <label asp-for="ProductTypes.ProductType">Book Category</label>
+                    </div>
+
+                    <div class="col-8">
+                        <input asp-for="ProductTypes.ProductType" class="alert-danger" readonly="readonly" />
+
+                    </div>
+                    <span asp-validation-for="ProductTypes.ProductType" class="text-danger"> </span>
+                </div>
+
+
+
+
+                <div class="form-group row mb-3">
+                    <div class="col-4">
+                    </div>
+
+                    <div class="col-8">
+
+                        @if (Model.IsAvailabel == true)
                         {
-                            @if (Model.IsAvailabel == true)
-                            {
-                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control">
-                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control" disabled>
-                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
-                                </button>
-                            }
-
-
+                            <h4 class="text-success">In stock</h4>
                         }
                         else
                         {
-                            <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
-                                <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
-                            </button>
+                            <h4 class="text-danger">Not Available</h4>
                         }
-                    }
+                        @if (UserRole != "Admin")
+                        {
+                            @if (isSelected == null)
+                            {
+                                @if (Model.IsAvailabel == true)
+                                {
+                                    <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control">
+                                        <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-route-id="@Model.Id" class="btn btn-success form-control" disabled>
+                                        <i class="fa-solid fa-cart-shopping"></i>&nbsp; Add to Cart
+                                    </button>
+                                }
 
-                    else
-                    {
-                        
-                        <a asp-action="Edit" asp-area="Admin" asp-controller="Products" class="btn btn-success btn-sm" asp-route-id="@Model.Id">Edit</a>
-                  
-                        <a asp-action="Delete" asp-area="Admin" asp-controller="Products" class="btn btn-danger btn-sm" asp-route-id="@Model.Id">Delete</a>
 
-                    }
+                            }
+                            else
+                            {
+                                <button type="submit" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">
+                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp; Remove from Cart
+                                </button>
+                            }
+                        }
+
+                        else
+                        {
+
+                            <a asp-action="Edit" asp-area="Admin" asp-controller="Products" class="btn btn-success btn-sm" asp-route-id="@Model.Id">Edit</a>
+
+                            <a asp-action="Delete" asp-area="Admin" asp-controller="Products" class="btn btn-danger btn-sm" asp-route-id="@Model.Id">Delete</a>
+
+                        }
+
+
+
+
+                    </div>
+
+                </div>
+
+                <br />
+                <div class="form-group">
+
+                    <a asp-action="Index" class="btn btn-success">Back to List</a>
+
 
 
 
                 </div>
-                
-            </div> 
 
-            <br />
-            <div class="form-group">
-               
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
-                
             </div>
 
+            <div class="col-1"></div>
+
+            <div class="col-3">
+                <img src="/@Model.Image" width="80%" />
+            </div>
+
+
+
         </div>
+    </form>
+</div>
 
-        <div class="col-1"></div>
+<div class="mt-4">
+    <div class="row">
+        <div class="col-6 mb-3"><h2>Reviews and Ratings</h2></div>
 
-        <div class="col-3">
-            <img src="/@Model.Image" width="100%" />
-        </div>
+        @if (@ViewBag.TotalReview !=0)
+        {
+            <div class="col-6">
+                <h3 class="text-end">
+                    @* @ViewBag.AvgRating *@
+                    @for (int i = 0; i < (int)@ViewBag.AvgRating; i++)
+                    {
+                        <i class="fa fa-star text-warning"></i>
+                    }
+                    @if (ViewBag.AvgRating % 1 != 0)
+                    {
+                        <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                    }
+                    @for (int i = (int)Math.Ceiling((double)@ViewBag.AvgRating); i < 5; i++)
+                    {
+                        <i class="fa fa-star text-secondary"></i>
+                    }
 
-
+                    <span>(@ViewBag.TotalReview)</span>
+                </h3>
+            </div>
+        }
 
     </div>
-</form>
+    
+
+    <div class="mb-3">
+        <a asp-action="Review" asp-controller="Home" asp-area="Customer" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Add Review
+        </a>
+    </div>
+
+    @if (ViewBag.reviews != null && ViewBag.reviews.Count > 0)
+    {
+        @foreach (var review in ViewBag.reviews)
+        {
+            <div class="card  mb-3">
+                <div class="card-body">
+
+                    <p class="mb-0"><i class="fa-solid fa-circle-user fa-2x text-secondary"></i><span><i> by </i><b>@review.UserEmail, </b><span class="text-secondary" style="font-size: 0.9em;">@review.Created_at </span> </span></p>
+                        <div>
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <i class="fa fa-star text-warning"></i>
+                            }
+                            @for (int i = review.Rating; i < 5; i++)
+                            {
+                                <i class="fa fa-star text-secondary"></i>
+                            }
+                        </div>
+
+                        <p class="text-muted mb-0">@review.Review</p>
+                    
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">No reviews yet. Be the first to leave one!</p>
+    }
+</div>
 
 
 @section Scripts {

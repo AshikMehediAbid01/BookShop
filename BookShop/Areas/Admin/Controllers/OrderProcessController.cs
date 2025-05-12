@@ -1,4 +1,9 @@
-﻿using BookShop.Data;
+using System.Threading.Tasks;
+using BookShop.Data;
+using BookShop.Models;
+using BookShop.Repositories.Interfaces;
+using BookShop.Services.Interfaces;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,75 +15,62 @@ namespace BookShop.Areas.Admin.Controllers;
 
 public class OrderProcessController : Controller
 {
-    private readonly ApplicationDbContext _db;
-    public OrderProcessController(ApplicationDbContext db)
+
+    private readonly IOrderProcessService _service;
+    public OrderProcessController(IOrderProcessService service)
     {
-        _db = db;
+        _service = service;
     }
 
 
-    // View All Orders
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
-        var orders = _db.Orders.ToList();
-
+        var orders = await _service.GetAllAsync();
         return View(orders);
     }
 
 
 
 
-    // View Order Details
-    public IActionResult Details(int id)
-    {
-        var order = _db.Orders
-            .Include(o => o.Order_Details)
-            .ThenInclude(od => od.Book)
-            .FirstOrDefault(o => o.Id == id);
 
-        if (order == null)
-        {
-            return NotFound();
-        }
-           
-        return View(order);
+    [HttpGet]
+    public async Task<IActionResult> OrderDetails(int id)
+    {
+        var orderDetails = await _service.GetByIdAsync(id);
+        if (orderDetails == null) return NotFound();
+        return View(orderDetails);
     }
 
 
+     
 
-
-    // Delete Order
-    public async Task<IActionResult> Delete(int? id)
+    [HttpGet]
+    public async Task<IActionResult> DeleteOrder(int? id)
     {
         if (id == null) return NotFound();
-
-        var order = await _db.Orders.FirstOrDefaultAsync(m => m.Id == id);
-
-        if (order == null)
-        {
-            return NotFound();
-        }
-
+        var order = await _service.GetByIdAsync(id.Value);
+        if (order == null) return NotFound();
         return View(order);
     }
 
+
+
+  
     [HttpPost]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteOrder(int id)
     {
-        var order = await _db.Orders
-            .Include(o => o.Order_Details)
-            .FirstOrDefaultAsync(o => o.Id == id);
+        await _service.DeleteAsync(id);
+        return RedirectToAction(nameof(Index));
+    }
 
-        if (order == null)
-        {
-            return NotFound();
-        }
-            
 
-        _db.OrderDetails.RemoveRange(order.Order_Details);
-        _db.Orders.Remove(order);
-        await _db.SaveChangesAsync();
 
+    
+    [HttpPost]
+    public async Task<IActionResult> UpdateOrderStatus(int id, string status)
+    {
+        await _service.UpdateAsync( id, status);
         return RedirectToAction(nameof(Index));
     }
 

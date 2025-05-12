@@ -22,4 +22,6 @@ public class Products
     [ForeignKey("ProductTypeId")]
     [ValidateNever]
     public virtual ProductTypes ProductTypes { get; set;}
+
+
 }

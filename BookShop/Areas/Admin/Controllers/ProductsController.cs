@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using BookShop.Data;
 using BookShop.Models;
+using BookShop.Repositories.Interfaces;
+using BookShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using X.PagedList.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -15,179 +20,125 @@ namespace BookShop.Areas.Admin.Controllers;
 [Authorize]
 public class ProductsController : Controller
 {
-    private readonly ApplicationDbContext _db;
-    private readonly IWebHostEnvironment _he;
+    private readonly IProductService _service;
 
-    public ProductsController(ApplicationDbContext db, IWebHostEnvironment he) 
+    public ProductsController(IProductService service) 
     {
-        _db = db;
-        _he = he;
+        _service = service;
     }
-    public IActionResult Index(int? page)
+
+
+
+    public async Task<IActionResult> Index(int? page)
     {
-        return View(_db.Products.Include(c=>c.ProductTypes).ToList().ToPagedList(page??1,10));
+        var books = await _service.GetAllAsync();
+        var Pagedbooks = books.ToPagedList(page ?? 1, 10);
+        return View(Pagedbooks);
     }
+
+
+
 
     // GET Method Create Action
-    public IActionResult Create()
+    [HttpGet]
+    public async Task<IActionResult> Create()
     {
-        ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+        ViewData["productTypeId"] = await _service.GetProductTypesSelectListAsync();
         return View();
     }
 
-
-
+    // Create Book
     [HttpPost]
-    // POST Create Action
     public async Task<IActionResult> Create(Products products, IFormFile? Image)
     {
-
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var searchBook = _db.Products.FirstOrDefault(c => c.Name == products.Name);
-
-            if(searchBook != null)
-            {
-                ViewBag.message = "This book already exists";
-                ViewData["ProductTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
-                return View(products);
-            }
-
-            if (Image != null)// C:\Abid\Project\BookShop\BookShop\BookShop\wwwroot\Images\random.jpg
-            {
-                var name = Path.Combine(_he.WebRootPath + "/Images/", Path.GetFileName(Image.FileName));
-               // await Image.CopyToAsync(new FileStream(name, FileMode.Create));
-
-                using (var stream = new FileStream(name, FileMode.Create))
-                {
-                    await Image.CopyToAsync(stream);
-                }
-
-                products.Image = "Images/" + Image.FileName;
-            }
-
-            else
-            {
-                products.Image = "Images/NoImageFound.jpg";
-            }
-                _db.Products.Add(products);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            ViewData["ProductTypeId"] = await _service.GetProductTypesSelectListAsync();
+            return View(products);
         }
-        ViewData["ProductTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
-        return View(products );
+
+        if(_service.IsProductExists(products.Name))
+        {
+                ViewBag.message = "This book already exists";
+                ViewData["ProductTypeId"] = await _service.GetProductTypesSelectListAsync();
+                return View(products);
+        }
+
+        await _service.CreateAsync(products, Image);
+        return RedirectToAction("Index");
+
     }
+
+
+
 
 
     // GET Edit Action
-
-    public IActionResult Edit(int? id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");  
+        if (id == null) return NotFound();
+        var book = await _service.GetByIdAsync(id.Value);
+        if(book == null)return NotFound();
 
-        if(id == null)
-        {
-            return NotFound();
-        }
-        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c => c.Id == id);
-        if(book == null)
-        {
-            return NotFound();
-        }
+        ViewData["productTypeId"] = await _service.GetProductTypesSelectListAsync();
         return View(book);
     }
+
+
+
 
     // Post Edit Action
-
     [HttpPost]
-
     public async Task<IActionResult> Edit(Products products, IFormFile? image)
     {
-        if (ModelState.IsValid)
-        {
-            if (image != null)
-            {
-                var name = Path.Combine(_he.WebRootPath + "/Images/", Path.GetFileName(image.FileName));
-                //await image.CopyToAsync(new FileStream(name, FileMode.Create));
-
-                using (var stream = new FileStream(name, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-                products.Image = "Images/" + image.FileName;
-            }
-            else
-            {
-                products.Image = "Images/NoImageFound.jpg";
-            }
-            _db.Products.Update(products);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+        if (!ModelState.IsValid)
+        { 
+            ViewData["ProductTypeId"] = await _service.GetProductTypesSelectListAsync();
+            return View(products);
         }
-        ViewData["ProductTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
-        return View(products);
+        
+        await _service.UpdateAsync(products, image);
+        return RedirectToAction("Index");
     }
 
-    // GET Details Action
 
-    public IActionResult Details(int? id)
+
+    // Details Action
+    public async Task<IActionResult> Details(int? id)
     {
-        if(id == null)
-        {
-            return NotFound();
-        }
-
-        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c => c.Id == id);
-
-        if (book == null)
-        {
-            return NotFound();
-        }
+        if(id == null) return NotFound();
+        var book = await _service.GetByIdAsync(id.Value);
+        if (book == null) return NotFound();
         return View(book);
     }
 
 
-    // Get Delete Action
 
-    public IActionResult Delete(int? id)
+
+
+    // Delete Action get method
+    public async Task<IActionResult> Delete(int? id)
     {
-        if(id == null)
-        {
-            return NotFound();
-        }
-
-        var book = _db.Products.Include(c => c.ProductTypes).Where(c => c.Id == id).FirstOrDefault();
-
-        if(book == null) {
-            return NotFound();
-        }
-
-
-
+        if(id == null)return NotFound();
+        var book = await _service.GetByIdAsync(id.Value);
+        if(book == null)return NotFound();
+        
         return View(book);
 
     }
 
-    // Post Delete Action
-
-    [HttpPost]
-    [ActionName("Delete")]
+    
+    // Delete Action post method
+    [HttpPost , ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirm(int? id)
     {
-        if(id == null)
-        {
-           return NotFound();
-        }
-
-        var book = _db.Products.FirstOrDefault(c => c.Id == id);
-        if (book == null) {
-            return NotFound();
-        }
-        _db.Products.Remove(book);
-        await _db.SaveChangesAsync();
+        if (id == null) return NotFound();
+        await _service.DeleteAsync(id.Value);
         return RedirectToAction(nameof(Index));
-
-
     }
+
+
+
+
 
 }

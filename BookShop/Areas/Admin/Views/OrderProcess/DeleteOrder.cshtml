@@ -1,0 +1,20 @@
+﻿@model BookShop.Models.Order
+@{
+    ViewData["Title"] = "Delete Order";
+}
+<h2 class="text-info">Delete Order</h2>
+
+<div>
+    <p><strong>Order No: </strong>@Model.Id</p>
+    <p><strong>Customer: </strong>@Model.CustomerName</p>
+    <p><strong>Email: </strong>@Model.CustomerEmail</p>
+    <p><strong>Address: </strong>@Model.CustomerAddress</p>
+    <p><strong>Totel Price: </strong>@Model.TotalPrice</p>
+
+</div>
+
+<form asp-action="DeleteOrder" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-info">Cancel</a>
+</form>

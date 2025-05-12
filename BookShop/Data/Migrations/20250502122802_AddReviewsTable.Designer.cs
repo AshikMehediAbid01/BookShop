@@ -4,6 +4,7 @@ using BookShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250502122802_AddReviewsTable")]
+    partial class AddReviewsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,10 +59,8 @@ namespace BookShop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
-
 
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");
@@ -158,7 +159,7 @@ namespace BookShop.Data.Migrations
                     b.Property<DateTime?>("Created_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Rating")
+                    b.Property<int?>("Rating")
                         .HasColumnType("int");
 
                     b.Property<string>("Review")

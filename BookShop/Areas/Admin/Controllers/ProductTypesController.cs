@@ -1,5 +1,8 @@
-﻿using BookShop.Data;
+﻿using System.Threading.Tasks;
+using BookShop.Data;
 using BookShop.Models;
+using BookShop.Repositories.Interfaces;
+using BookShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,143 +12,104 @@ namespace BookShop.Areas.Admin.Controllers;
 [Authorize]
 public class ProductTypesController : Controller
 {
-    private readonly ApplicationDbContext _db;
+    private readonly IProductTypeService _service;
 
-    public ProductTypesController(ApplicationDbContext db)
+    public ProductTypesController(IProductTypeService service )
     {
-        _db = db;
+        _service = service;
     }
 
-    public IActionResult Index()
+    // Get All Product Types
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
-        var data = _db.ProductTypes.ToList();
-        return View(data);
+        var bookCategories = await _service.GetAllAsync();
+        return View(bookCategories);
     }
 
-    // Create Method get Action 
-    public ActionResult Create()
-    {
-        return View();
-    }
+    // Create Action get Method
+    public ActionResult Create() => View();
 
-    // Create Method Post Action 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+
+
+    // Create Action Post Method
+    [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ProductTypes productTypes)
     {
-        if(ModelState.IsValid)
-        {
-            _db.ProductTypes.Add(productTypes);
-            await _db.SaveChangesAsync();
-            TempData["alertMsg"] = "Product Type Created Successfully";
-            TempData["type"] = "Create";
-            return RedirectToAction(nameof(Index));
-        }
-        return View(productTypes); 
+        if(!ModelState.IsValid) return View(productTypes);
+
+        await _service.CreateAsync(productTypes);
+        TempData["alertMsg"] = "Product Type Created Successfully";
+        TempData["type"] = "Create";
+        
+        return RedirectToAction(nameof(Index));
+       
     }
 
-    // Edit Action get  Method
-    public IActionResult Edit(int? id)
+
+    // Edit Action get Method
+    public async Task<IActionResult> Edit(int? id)
     {
-        if(id == null)
-        {
-            return NotFound();
-        }
-        var productType = _db.ProductTypes.Find(id);
-        if(productType == null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
+        var productType = await _service.GetByIdAsync(id.Value);
+        if (productType == null) return NotFound();
+
         return View(productType);
     }
+
+
     
     // Edit Action Post  Method
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(ProductTypes productTypes)
     {
-        if (ModelState.IsValid)
-        {
-            _db.Update(productTypes);
-            await _db.SaveChangesAsync();
-            TempData["alertMsg"] = "Book Type is Updated";
-            TempData["type"] = "update";
-            return RedirectToAction(nameof(Index));
-        }
-     
-        return View(productTypes);
+        if (!ModelState.IsValid) return View(productTypes);
+
+        await _service.UpdateAsync(productTypes);
+        TempData["alertMsg"] = "Book Category is Updated";
+        TempData["type"] = "update";
+        
+        return RedirectToAction(nameof(Index));             
     }
 
 
     // Details Action get  Method
-    public ActionResult Details(int? id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-        var productType = _db.ProductTypes.Find(id);
-        if (productType == null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
+        var productType = await _service.GetByIdAsync(id.Value);
+        if (productType == null) return NotFound();
+        
         return View(productType);
     }
 
-/*    // Details Action Post  Method
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Details(ProductTypes productTypes)
-    {
-        return RedirectToAction(nameof(Index));
-    }*/
 
-    // Delete get Action Method
-    public ActionResult Delete(int? id)
+    // Delete Action get Method
+    public async Task<ActionResult> Delete(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-        var productType = _db.ProductTypes.Find(id);
-        if (productType == null)
-        {
-            return NotFound();
-        }
+        if (id == null)return NotFound();
+        var productType = await _service.GetByIdAsync(id.Value);
+        if (productType == null) return NotFound();
+        
         return View(productType);
     }
+
 
     // Delete Post Action Method
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int? id,ProductTypes productTypes)
+    [HttpPost,ValidateAntiForgeryToken,ActionName("Delete")]
+    public async Task<IActionResult> DeleteCategory(int? id) 
     {
-        Console.WriteLine("########################"+productTypes.Id);
-        if(id== null)
-        {
-            return NotFound();
-        }
+        if(id== null) return NotFound();
+        var productType =await _service.GetByIdAsync(id.Value);
+        if (productType == null)return NotFound();
+        await _service.DeleteAsynce(productType);
 
-        if(id != productTypes.Id)
-        {
-            return NotFound();
-        }
-        var productType = _db.ProductTypes.Find(id);
-        if (productType == null)
-        {
-            return NotFound();
-        }
+        TempData["alertMsg"] = "Book Category is deleted";
+        TempData["type"] = "delete";
 
-        if (ModelState.IsValid)  
-        {
-            _db.Remove(productType);
-            await _db.SaveChangesAsync();
-            TempData["alertMsg"] = "Book Type is deleted";
-            TempData["type"] = "delete";
-            return RedirectToAction(nameof(Index));
-        }
+        return RedirectToAction(nameof(Index));
 
-        return View(productTypes);
     }
 
 }
