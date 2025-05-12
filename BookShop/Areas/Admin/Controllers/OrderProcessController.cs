@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using BookShop.Data;
 using BookShop.Models;
 using BookShop.Repositories.Interfaces;
 using BookShop.Services.Interfaces;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,12 @@ namespace BookShop.Areas.Admin.Controllers;
 
 public class OrderProcessController : Controller
 {
+
     private readonly IOrderProcessService _service;
     public OrderProcessController(IOrderProcessService service)
     {
         _service = service;
     }
-
 
 
     [HttpGet]
@@ -28,6 +29,7 @@ public class OrderProcessController : Controller
         var orders = await _service.GetAllAsync();
         return View(orders);
     }
+
 
 
 

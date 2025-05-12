@@ -56,8 +56,10 @@ namespace BookShop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
+
 
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");

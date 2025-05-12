@@ -33,6 +33,7 @@ public class HomeController : Controller
         ViewBag.ProductTypes = _db.ProductTypes.ToList();
         ViewBag.CategoryId = categoryId ?? 0;
 
+
         if (categoryId != null &&  categoryId != 0)
         {
             return View(_db.Products.Include(c=>c.ProductTypes).Where(c=>c.ProductTypeId==categoryId).ToList().ToPagedList(page ?? 1, 8));
