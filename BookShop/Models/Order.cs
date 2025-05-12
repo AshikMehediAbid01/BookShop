@@ -2,6 +2,7 @@
 
 namespace BookShop.Models;
 
+
 public class Order
 {
     public int Id { get; set; }
@@ -16,7 +17,11 @@ public class Order
     [Required]
     [Display(Name = "Address")]
     public string CustomerAddress { get; set; }
-    public DateTime OrderDate { get; set; }
-    public string Note { get; set; } 
+    public DateTime OrderDate { get; set; } = DateTime.Now;
+    public string? Note { get; set; } 
+    public int TotalPrice { get; set; }
     public virtual List<OrderDetails> Order_Details { get; set; } = new List<OrderDetails>();
+
+    [Display(Name = "Status")]
+    public String? Status { get; set; } = "Pending";
 }

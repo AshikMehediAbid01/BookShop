@@ -1,4 +1,5 @@
-﻿using BookShop.Data;
+﻿using System.Security.Claims;
+using BookShop.Data;
 using BookShop.Models;
 using BookShop.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +50,7 @@ public class OrderController : Controller
             }
         }
         customerOrder.OrderNumber = GetOrderNo();
+        customerOrder.CustomerEmail = User.FindFirstValue(ClaimTypes.Email);
         _db.Orders.Add(customerOrder);
 
         await _db.SaveChangesAsync();
@@ -56,7 +58,7 @@ public class OrderController : Controller
         HttpContext.Session.Set("SelectedBooks", new List<Products>());
 
         
-        return View(customerOrder);
+        return RedirectToAction("Index", "Home");
     }
 
     public string GetOrderNo()

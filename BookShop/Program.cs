@@ -1,4 +1,8 @@
 using BookShop.Data;
+using BookShop.Repositories.Implementations;
+using BookShop.Repositories.Interfaces;
+using BookShop.Services.Implementations;
+using BookShop.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +17,14 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>(); 
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>(); 
+builder.Services.AddScoped<IProductRepository, ProductRepository>();      
+builder.Services.AddScoped<IProductService, ProductService>();      
+builder.Services.AddScoped<IOrderProcessRepository, OrderProcessRepository>();
+builder.Services.AddScoped<IOrderProcessService, OrderProcessService>();
 
 
 
