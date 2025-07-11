@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BookShop.Data.Migrations
+namespace BookShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -56,10 +56,8 @@ namespace BookShop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
-
 
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");

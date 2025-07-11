@@ -28,7 +28,13 @@ public class ProductsController : Controller
     }
 
 
-
+    /// <summary>
+    /// Show all product
+    /// </summary>
+    /// <param name="page"></param>
+    /// <returns></returns>
+    /// 
+    [HttpGet("products")]
     public async Task<IActionResult> Index(int? page)
     {
         var books = await _service.GetAllAsync();
@@ -39,8 +45,11 @@ public class ProductsController : Controller
 
 
 
-    // GET Method Create Action
-    [HttpGet]
+    /// <summary>
+    ///  Create new product
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("add-new-product")]
     public async Task<IActionResult> Create()
     {
         ViewData["productTypeId"] = await _service.GetProductTypesSelectListAsync();
@@ -74,6 +83,7 @@ public class ProductsController : Controller
 
 
     // GET Edit Action
+    [HttpGet("update-product/{id}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -103,7 +113,13 @@ public class ProductsController : Controller
 
 
 
-    // Details Action
+
+    /// <summary>
+    /// This action retrieves the details of a specific book by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("product-details/{id}")]
     public async Task<IActionResult> Details(int? id)
     {
         if(id == null) return NotFound();
@@ -116,7 +132,12 @@ public class ProductsController : Controller
 
 
 
-    // Delete Action get method
+    /// <summary>
+    /// This action retrieves the book to be deleted by its ID and displays a confirmation view.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("delete-product/{id}")]
     public async Task<IActionResult> Delete(int? id)
     {
         if(id == null)return NotFound();
@@ -136,9 +157,6 @@ public class ProductsController : Controller
         await _service.DeleteAsync(id.Value);
         return RedirectToAction(nameof(Index));
     }
-
-
-
 
 
 }

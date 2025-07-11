@@ -13,6 +13,7 @@ namespace BookShop.Data
         public DbSet<ProductTypes> ProductTypes {  get; set; } 
         public DbSet<Products> Products {  get; set; }
         public DbSet<Order> Orders { get; set; }
+       // public DbSet<NewOrder> NewOrders  { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers {  get; set; }
         public DbSet<Reviews> Reviews {  get; set; }
