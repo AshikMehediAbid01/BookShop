@@ -26,7 +26,6 @@ public class ProductRepository : IProductRepository
     public async Task AddAsync(Products product)
     {
         await _db.Products.AddAsync(product);
-        await _db.SaveChangesAsync();
     }
     public async Task UpdateAsync(Products product)
     {
@@ -34,14 +33,12 @@ public class ProductRepository : IProductRepository
         if(existingProduct != null)
         {
             _db.Products.Update(product);
-            await _db.SaveChangesAsync();
         }
 
     }
     public async Task DeleteAsync(Products product)
     {
         _db.Products.Remove(product);
-        await _db.SaveChangesAsync();
     }
 
     public async Task<SelectList> GetProductTypesSelectList()

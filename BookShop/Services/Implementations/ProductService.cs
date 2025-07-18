@@ -9,11 +9,11 @@ namespace BookShop.Services.Implementations
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _he;
-        public ProductService(IProductRepository repo, IWebHostEnvironment he)
+        public ProductService(IUnitOfWork unitOfWork, IWebHostEnvironment he)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
             _he = he;
         }
 
@@ -22,16 +22,17 @@ namespace BookShop.Services.Implementations
         public async Task CreateAsync(Products products, IFormFile? Image)
         {
             products.Image = await SaveImageAsync(Image);
-            await _repo.AddAsync(products);
+            await _unitOfWork.ProductRepository.AddAsync(products);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
 
-        public Task<IEnumerable<Products>> GetAllAsync() => _repo.GetAllAsync();
-        public Task<Products?> GetByIdAsync(int id) => _repo.GetByIdAsync(id);
-        public async Task<string> GetImageUrlAsync(int id) => await _repo.GetImageUrlAsync(id) ?? "Images/NoImageFound.jpg";
-        public Task<SelectList> GetProductTypesSelectListAsync() => _repo.GetProductTypesSelectList();
-        public bool IsProductExists(string name) => _repo.IsExists(name);
+        public Task<IEnumerable<Products>> GetAllAsync() => _unitOfWork.ProductRepository.GetAllAsync();
+        public Task<Products?> GetByIdAsync(int id) => _unitOfWork.ProductRepository.GetByIdAsync(id);
+        public async Task<string> GetImageUrlAsync(int id) => await _unitOfWork.ProductRepository.GetImageUrlAsync(id) ?? "Images/NoImageFound.jpg";
+        public Task<SelectList> GetProductTypesSelectListAsync() => _unitOfWork.ProductRepository.GetProductTypesSelectList();
+        public bool IsProductExists(string name) => _unitOfWork.ProductRepository.IsExists(name);
         
 
 
@@ -42,15 +43,17 @@ namespace BookShop.Services.Implementations
                 ? await SaveImageAsync(Image) : await GetImageUrlAsync(product.Id) 
                 ?? "Images/NoImageFound.jpg";
 
-                await _repo.UpdateAsync(product);
+                await _unitOfWork.ProductRepository.UpdateAsync(product);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
 
         public async Task DeleteAsync(int id)
         {
-            var book = await _repo.GetByIdAsync(id);
-            if (book != null) await _repo.DeleteAsync(book);
+            var book = await _unitOfWork.ProductRepository.GetByIdAsync(id);
+            if (book != null) await _unitOfWork.ProductRepository.DeleteAsync(book);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 

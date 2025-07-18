@@ -43,7 +43,6 @@ public class OrderProcessRepository : IOrderProcessRepository
         {
             _context.OrderDetails.RemoveRange(order.Order_Details);
             _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
         }
 
     }
@@ -58,14 +57,12 @@ public class OrderProcessRepository : IOrderProcessRepository
             .FirstOrDefaultAsync(o => o.Id == id);
     }
 
-
-
-    public async Task UpdateAsync(Order order)
+    public void Update(Order order)
     {
-        _context.Orders.Update(order);
-        await _context.SaveChangesAsync();
-
+        if (order != null)
+        {
+            _context.Orders.Update(order);
+        }
     }
-
 
 }

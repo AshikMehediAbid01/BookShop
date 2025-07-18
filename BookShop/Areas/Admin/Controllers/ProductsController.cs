@@ -49,7 +49,7 @@ public class ProductsController : Controller
     ///  Create new product
     /// </summary>
     /// <returns></returns>
-    [HttpGet("add-new-product")]
+   // [HttpGet("add-new-product")]
     public async Task<IActionResult> Create()
     {
         ViewData["productTypeId"] = await _service.GetProductTypesSelectListAsync();
@@ -83,7 +83,6 @@ public class ProductsController : Controller
 
 
     // GET Edit Action
-    [HttpGet("update-product/{id}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -119,7 +118,6 @@ public class ProductsController : Controller
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("product-details/{id}")]
     public async Task<IActionResult> Details(int? id)
     {
         if(id == null) return NotFound();
@@ -137,7 +135,6 @@ public class ProductsController : Controller
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("delete-product/{id}")]
     public async Task<IActionResult> Delete(int? id)
     {
         if(id == null)return NotFound();

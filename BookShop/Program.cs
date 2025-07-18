@@ -24,7 +24,9 @@ builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();      
 builder.Services.AddScoped<IProductService, ProductService>();      
 builder.Services.AddScoped<IOrderProcessRepository, OrderProcessRepository>();
-builder.Services.AddScoped<IOrderProcessService, OrderProcessService>();
+builder.Services.AddScoped<IOrderProcessService, OrderProcessService>();    
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();    
+
 
 
 

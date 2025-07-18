@@ -8,6 +8,6 @@ public interface IProductTypeService
     Task<ProductTypes> GetByIdAsync(int id);
     Task CreateAsync(ProductTypes productType);
     Task UpdateAsync(ProductTypes productType);
-    Task DeleteAsynce(ProductTypes productType);
+    Task DeleteAsync(ProductTypes productType);
 
 }

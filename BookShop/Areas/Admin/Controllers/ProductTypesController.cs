@@ -103,7 +103,7 @@ public class ProductTypesController : Controller
         if(id== null) return NotFound();
         var productType =await _service.GetByIdAsync(id.Value);
         if (productType == null)return NotFound();
-        await _service.DeleteAsynce(productType);
+        await _service.DeleteAsync(productType);
 
         TempData["alertMsg"] = "Book Category is deleted";
         TempData["type"] = "delete";

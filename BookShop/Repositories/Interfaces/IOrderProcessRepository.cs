@@ -7,8 +7,9 @@ namespace BookShop.Repositories.Interfaces
         Task<IEnumerable<Order>> GetAllAsync();
         Task <Order?> GetByIdOrderDetailsAsync(int id);
         Task<Order?> GetByIdAsync(int id);
-        Task UpdateAsync(Order order);
+        void Update(Order order);
         Task DeleteAsync(int id);
 
     }
 }
+ 

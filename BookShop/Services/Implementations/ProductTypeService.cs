@@ -7,16 +7,16 @@ namespace BookShop.Services.Implementations
 {
     public class ProductTypeService : IProductTypeService
     {
-        private readonly IProductTypeRepository _repo;
-        public ProductTypeService(IProductTypeRepository repo)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductTypeService(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
         }
 
 
         public async Task<ProductTypes> GetByIdAsync(int id)
         {
-            var category = await _repo.GetByIdAsync(id);
+            var category = await _unitOfWork.ProductTypeRepository.GetByIdAsync(id);
 
             if(category == null)
             {
@@ -25,14 +25,27 @@ namespace BookShop.Services.Implementations
             return category;
         }
 
-        public async Task<IEnumerable<ProductTypes>> GetAllAsync() => await _repo.GetAllAsync();
+        public async Task<IEnumerable<ProductTypes>> GetAllAsync() => await _unitOfWork.ProductTypeRepository.GetAllAsync();
 
-        public async Task CreateAsync(ProductTypes productType) => await _repo.AddAsync(productType);
+        public async Task CreateAsync(ProductTypes productType)
+        {
+            await _unitOfWork.ProductTypeRepository.AddAsync(productType);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-        public async Task DeleteAsynce(ProductTypes productType) => await _repo.DeleteAsync(productType);
-        
-        public async Task UpdateAsync(ProductTypes productType) => await _repo.UpdateAsync(productType);
+        public async Task DeleteAsync(ProductTypes productType)
+        {
+            await _unitOfWork.ProductTypeRepository.DeleteAsync(productType);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-        
+
+        public async Task UpdateAsync(ProductTypes productType)
+        {
+            await _unitOfWork.ProductTypeRepository.UpdateAsync(productType);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
     }
 }
