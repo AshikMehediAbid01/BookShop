@@ -2,13 +2,9 @@
 
 namespace BookShop.Repositories.Interfaces
 {
-    public interface IProductTypeRepository
+    public interface IProductTypeRepository : IRepository<ProductTypes>
     {
-        Task<IEnumerable<ProductTypes>> GetAllAsync();
-        Task<ProductTypes?> GetByIdAsync(int id);
-        Task AddAsync(ProductTypes productType);
-        Task UpdateAsync(ProductTypes productType);
-        Task DeleteAsync(ProductTypes productTypes);
+
 
     }
 }

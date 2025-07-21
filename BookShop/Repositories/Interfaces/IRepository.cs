@@ -1,8 +1,14 @@
-﻿namespace BookShop.Repositories.Interfaces;
+﻿using BookShop.Models;
+
+namespace BookShop.Repositories.Interfaces;
 
 public interface IRepository<T> where T : class
 {
-    T GetById(int id);
-
+    Task<T?> GetByIdAsync(int id);
+    Task<IEnumerable<T>> GetAllAsync();
+    Task AddAsync(T obj);
+    Task UpdateAsync(T obj);
+    Task DeleteAsync(T obj);
 
 }
+
