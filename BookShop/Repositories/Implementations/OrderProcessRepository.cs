@@ -18,7 +18,8 @@ public class OrderProcessRepository : IOrderProcessRepository
 
     public async Task<IEnumerable<Order>> GetAllAsync()
     {
-        return await _context.Orders.OrderByDescending(d=>d.Id).ToListAsync();
+        return await _context.Orders.AsNoTracking()
+            .OrderByDescending(d=>d.Id).ToListAsync();
     }
 
 
@@ -26,6 +27,7 @@ public class OrderProcessRepository : IOrderProcessRepository
     public async Task<Order?> GetByIdOrderDetailsAsync(int id)
     {
         return await _context.Orders
+            .AsNoTracking()
             .Include(o => o.Order_Details)
             .ThenInclude(od => od.Book)
             .FirstOrDefaultAsync(o => o.Id == id);
@@ -52,6 +54,7 @@ public class OrderProcessRepository : IOrderProcessRepository
     public Task<Order?> GetByIdAsync(int id)
     {
         return _context.Orders
+            .AsNoTracking()
             .Include(o => o.Order_Details)
             .ThenInclude(od => od.Book)
             .FirstOrDefaultAsync(o => o.Id == id);

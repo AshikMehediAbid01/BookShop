@@ -28,12 +28,13 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _table.ToListAsync();
+        return await _table.AsNoTracking().ToListAsync();
     }
 
     public async Task<T?> GetByIdAsync(int id)
     {
-        return await _table.FindAsync(id);
+        return await _table.AsNoTracking()
+            .FirstOrDefaultAsync(e=> EF.Property<int>(e,"Id") == id);
     }
 
     public  Task UpdateAsync(T obj)

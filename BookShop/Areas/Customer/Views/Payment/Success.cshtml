@@ -1,0 +1,50 @@
+﻿@using BookShop.Models.AamarPay;
+@model AamarPayValidationResponse
+@{
+    ViewData["Title"] = "Payment Success";
+}
+
+<h2>✅ Payment Successful</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Transaction ID</th>
+        <td>@Model.pg_txnid</td>
+    </tr>
+    <tr>
+        <th>Merchant Transaction ID</th>
+        <td>@Model.mer_txnid</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>@Model.status_title (@Model.pay_status)</td>
+    </tr>
+    <tr>
+        <th>Amount</th>
+        <td>@Model.amount @Model.currency</td>
+    </tr>
+    <tr>
+        <th>Payment Method</th>
+        <td>@Model.payment_processor</td>
+    </tr>
+    <tr>
+        <th>Customer</th>
+        <td>@Model.cus_name (@Model.cus_email, @Model.cus_phone)</td>
+    </tr>
+
+
+    <tr>
+        <th>Bank Trx ID</th>
+        <td>@Model.bank_trxid</td>
+    </tr>
+
+    <tr>
+        <th>Processed Date</th>
+        <td>@Model.date</td>
+    </tr>
+
+</table>
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-outline-success ">
+    <i class="fa-solid fa-house"></i>Back to Home
+</a>

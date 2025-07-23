@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Payment Failed";
+}
+
+<h2>❌ Payment Failed</h2>
+
+<p>Your payment could not be completed. Please try again later.</p>
+
+@if (ViewBag.Reason != null)
+{
+    <p><strong>Reason:</strong> @ViewBag.Reason</p>
+}
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-outline-success ">
+    <i class="fa-solid fa-house"></i>Back to Home
+</a>

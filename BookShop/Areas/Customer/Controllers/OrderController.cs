@@ -55,10 +55,17 @@ public class OrderController : Controller
 
         await _db.SaveChangesAsync();
 
+        TempData["CustomerName"] = customerOrder.CustomerName;
+        TempData["CustomerEmail"] = customerOrder.CustomerEmail;
+        TempData["customerNumber"] = customerOrder.CustomerPhone;
+        TempData["TotalAmount"] = customerOrder.TotalPrice.ToString(); 
+        TempData["CustomerAddress"] = customerOrder.CustomerAddress; 
+
+
         HttpContext.Session.Set("SelectedBooks", new List<Products>());
 
         
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("pay", "Payment");
     }
 
     public string GetOrderNo()
