@@ -15,12 +15,12 @@ public class ProductRepository : IProductRepository
     }
     public async Task<IEnumerable<Products>> GetAllAsync() 
     {
-        return await _db.Products.Include(c => c.ProductTypes).ToListAsync();
+        return await _db.Products.Include(c => c.ProductTypes).AsNoTracking().ToListAsync();
     }
 
     public async Task<Products?> GetByIdAsync(int id)
     {
-        return await _db.Products.Include(c => c.ProductTypes).FirstOrDefaultAsync(x => x.Id == id);
+        return await _db.Products.Include(c => c.ProductTypes).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task AddAsync(Products product)
@@ -43,7 +43,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<SelectList> GetProductTypesSelectList()
     {
-        var productTypes = await _db.ProductTypes.ToListAsync();
+        var productTypes = await _db.ProductTypes.AsNoTracking().ToListAsync();
         return new SelectList(productTypes, "Id", "ProductType");
     }
 

@@ -4,7 +4,7 @@ namespace BookShop.Repositories.Interfaces
 {
     public interface IOrderProcessRepository
     {
-        Task<IEnumerable<Order>> GetAllAsync();
+        Task<IEnumerable<Order>> GetAllAsync(string status);
         Task <Order?> GetByIdOrderDetailsAsync(int id);
         Task<Order?> GetByIdAsync(int id);
         void Update(Order order);

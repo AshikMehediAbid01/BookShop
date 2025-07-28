@@ -6,6 +6,34 @@
 
 <h2>Orders</h2>
 
+
+<form asp-action="Index" method="get">
+    <div class="row">
+        <div class="col-md-6">
+           @*  <input type="text" name="search" class="form-control" placeholder="Search by product name..." value="@ViewBag.SearchTerm" /> *@
+        </div>
+        <div class="col-md-4">
+            <select name="status" class="form-select">
+                <option>All</option>
+                @foreach (var cat in ViewBag.StatusOption as SelectList)
+                {
+                    <option value="@cat.Text" selected="@(cat.Text == ViewBag.SelectedStatus)">
+                        @cat.Text
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark w-100">Filter</button>
+        </div>
+    </div>
+
+</form>
+
+<br />
+
+
+
 <table class="table table-striped border">
     <thead>
         <tr class="table-info">

@@ -16,10 +16,19 @@ public class OrderProcessRepository : IOrderProcessRepository
     }
 
 
-    public async Task<IEnumerable<Order>> GetAllAsync()
+    public async Task<IEnumerable<Order>> GetAllAsync(string status)
     {
+        var orders = _context.Orders.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrEmpty(status) && status != "All")
+            orders = orders.Where(o => o.Status == status)
+                .OrderByDescending(o=>o.OrderDate);
+
+        return await orders.ToListAsync();
+
+/*
         return await _context.Orders.AsNoTracking()
-            .OrderByDescending(d=>d.Id).ToListAsync();
+            .OrderByDescending(d=>d.Id).ToListAsync();*/
     }
 
 

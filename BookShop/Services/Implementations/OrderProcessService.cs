@@ -12,7 +12,7 @@ public class OrderProcessService : IOrderProcessService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<Order>> GetAllAsync() => await _unitOfWork.OrderProcessRepository.GetAllAsync();
+    public async Task<IEnumerable<Order>> GetAllAsync(string status) => await _unitOfWork.OrderProcessRepository.GetAllAsync(status);
     
     public async Task<Order?> GetByIdAsync(int id) => await _unitOfWork.OrderProcessRepository.GetByIdOrderDetailsAsync(id);
 

@@ -1,14 +1,11 @@
-using System.Diagnostics;
-using System.Net;
-using System.Security.Claims;
 using BookShop.Data;
 using BookShop.Models;
 using BookShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using X.PagedList.Extensions;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookShop.Areas.Customer.Controllers;
 
@@ -28,45 +25,56 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index(int? page, int? categoryId)
-    {
+    public IActionResult Index(int? page, int? categoryId, string search)
+   {
         ViewBag.ProductTypes = _db.ProductTypes.ToList();
         ViewBag.CategoryId = categoryId ?? 0;
+        ViewBag.SearchTerm = search;
 
 
-        if (categoryId != null &&  categoryId != 0)
+        var books = _db.Products
+            .AsNoTracking()
+            .Include(c => c.ProductTypes)
+            .AsQueryable();
+
+        if (categoryId != null && categoryId != 0)
         {
-            return View(_db.Products.Include(c=>c.ProductTypes).Where(c=>c.ProductTypeId==categoryId).ToList().ToPagedList(page ?? 1, 8));
+            books = books.Where(p => p.ProductTypeId == categoryId.Value);
+
         }
+        if (!string.IsNullOrEmpty(search))
+        {
+            books = books.Where(p => p.Name.Contains(search) || p.Author.Contains(search));
+        }
+
+
         else
         {
             return View(_db.Products.ToList().ToPagedList(page ?? 1, 8));
         }
+
+        var pagedBooks = books.ToPagedList(page ?? 1, 8);
+        return View(pagedBooks);
     }
 
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
 
 
     // Details Action => (Get Method)
     public IActionResult Details(int? id)
     {
-        if(id == null)
+        if (id == null)
         {
             return NotFound();
         }
-        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c=>c.Id == id);
-        if(book == null)
+        var book = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c => c.Id == id);
+        if (book == null)
         {
             return NotFound();
         }
-        
+
         ViewBag.TotalReview = _db.Reviews.Count(c => c.BookId == id);
-        if(ViewBag.TotalReview == 0)
+        if (ViewBag.TotalReview == 0)
         {
             ViewBag.AvgRating = 0;
         }
@@ -75,7 +83,7 @@ public class HomeController : Controller
             ViewBag.AvgRating = _db.Reviews.Where(c => c.BookId == id).Average(r => (double)r.Rating);
         }
         ViewBag.reviews = _db.Reviews.Where(c => c.BookId == id).ToList();
-        
+
 
         return View(book);
     }
@@ -113,7 +121,7 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Remove(int? id)
     {
-        List<Products>books = HttpContext.Session.Get<List<Products>>("SelectedBooks");
+        List<Products> books = HttpContext.Session.Get<List<Products>>("SelectedBooks");
 
         var book = books.FirstOrDefault(c => c.Id == id);
 
@@ -158,6 +166,33 @@ public class HomeController : Controller
         return View(orders);
     }
 
+    public IActionResult My_Orders()
+    {
+        var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+        var orders = _db.Orders
+            .Where(o => o.CustomerEmail == userEmail)
+            .Select(o => new
+            {
+                o.OrderNumber,
+                o.OrderDate,
+                o.TotalPrice,
+                o.Status,
+                OrderDetails = o.Order_Details.Select(od => new
+                {
+                    od.Book.Name,
+                    od.Book.Price
+                })
+
+            })
+            .OrderByDescending(o => o.OrderDate)
+            .ToList();
+
+        return View(orders);
+    }
+
+
+
 
     // Add reviews
     [Authorize]
@@ -173,7 +208,7 @@ public class HomeController : Controller
             BookId = id ?? 0
         };
 
-        return View(model); 
+        return View(model);
     }
 
     [Authorize]
@@ -187,7 +222,7 @@ public class HomeController : Controller
             UserEmail = User.FindFirstValue(ClaimTypes.Email),
             Created_at = DateTime.Now,
             Rating = rating,
-            Review = review 
+            Review = review
         };
 
         if (!ModelState.IsValid)
@@ -198,7 +233,7 @@ public class HomeController : Controller
         _db.Reviews.Add(Bookreview);
         await _db.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Details), new{id = id});
+        return RedirectToAction(nameof(Details), new { id = id });
     }
 
 

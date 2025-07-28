@@ -23,7 +23,7 @@ public class PaymentController(IHttpClientFactory _httpClientFactory,ILogger<Pay
         var CustomerEmail = TempData["CustomerEmail"] as string;
         var CustomerPhone = TempData["customerNumber"] as string;
         var TotalPrice = TempData["TotalAmount"] as string;
-        //  var CustomerAddress = TempData["CustomerAddress"] as string;
+        var CustomerAddress = TempData["CustomerAddress"] as string;
 
         var paymentData = new AamarPayRequest
         {
@@ -38,7 +38,7 @@ public class PaymentController(IHttpClientFactory _httpClientFactory,ILogger<Pay
             desc = "Merchant Registration Payment",
             cus_name = CustomerName ?? "anonymous",
             cus_email = CustomerEmail ?? "payer@merchantcusomter.com",
-            cus_add1 = "ss",// CustomerAddress,
+            cus_add1 = CustomerAddress,
             cus_add2 = "Mohakhali DOHS",
             cus_city = "Dhaka",
             cus_state = "Dhaka",
@@ -55,11 +55,19 @@ public class PaymentController(IHttpClientFactory _httpClientFactory,ILogger<Pay
 
         var response = await httpClient.PostAsync(SandboxApiUrl, content);
         var responseString = await response.Content.ReadAsStringAsync();
-        var responseData = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
+       // var responseData = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
 
-        if (responseData.TryGetValue("payment_url", out var paymentUrl))
+        try
         {
-            return Redirect(paymentUrl);
+            var responseData = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
+            if (responseData.TryGetValue("payment_url", out var paymentUrl))
+            {
+                return Redirect(paymentUrl);
+            }
+        }
+        catch (Exception)
+        {
+            return BadRequest("Something went wrong");
         }
         return BadRequest("Payment URL not found in response.");
     }
@@ -91,6 +99,7 @@ public class PaymentController(IHttpClientFactory _httpClientFactory,ILogger<Pay
     [HttpPost("/Customer/Payment/fail")]
     public IActionResult Fail()
     {
+
         return View("Fail");
     }
 

@@ -1,12 +1,12 @@
-using System.Threading.Tasks;
 using BookShop.Data;
 using BookShop.Models;
 using BookShop.Repositories.Interfaces;
 using BookShop.Services.Interfaces;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BookShop.Areas.Admin.Controllers;
 
@@ -24,9 +24,12 @@ public class OrderProcessController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string status)
     {
-        var orders = await _service.GetAllAsync();
+        var orders = await _service.GetAllAsync(status);
+        var categories = new List<string>{ "Pending", "InProcess", "Shipped", "Delivered" };
+        ViewBag.StatusOption = new SelectList(categories);
+        ViewBag.SelectedStatus = status;
         return View(orders);
     }
 
@@ -53,10 +56,6 @@ public class OrderProcessController : Controller
         if (order == null) return NotFound();
         return View(order);
     }
-
-
-
-  
     [HttpPost]
     public async Task<IActionResult> DeleteOrder(int id)
     {
