@@ -1,16 +1,21 @@
-﻿using BookShop.Models;
+﻿using BookShop.Areas.Admin.Controllers;
+using BookShop.Models;
 using BookShop.Repositories.Interfaces;
 using BookShop.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Threading.Tasks;
 
 namespace BookShop.Services.Implementations
 {
     public class ProductTypeService : IProductTypeService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductTypeService(IUnitOfWork unitOfWork)
+        private readonly ILogger<ProductTypeService> _logger;
+
+        public ProductTypeService(IUnitOfWork unitOfWork, ILogger<ProductTypeService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
 
@@ -29,7 +34,9 @@ namespace BookShop.Services.Implementations
 
         public async Task CreateAsync(ProductTypes productType)
         {
+            _logger.LogInformation($"Service ===============================================================Thread ID: {Thread.CurrentThread.ManagedThreadId}");
             await _unitOfWork.ProductTypeRepository.AddAsync(productType);
+            _logger.LogInformation($"Service ===============================================================Thread ID: {Thread.CurrentThread.ManagedThreadId}");
             await _unitOfWork.SaveChangesAsync();
         }
 

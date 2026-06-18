@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using X.PagedList.Extensions;
 
 namespace BookShop.Areas.Customer.Controllers;
@@ -25,9 +26,9 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index(int? page, int? categoryId, string search)
-   {
-        ViewBag.ProductTypes = _db.ProductTypes.ToList();
+    public async Task<IActionResult> Index(int? page, int? categoryId, string search)
+    {
+        ViewBag.ProductTypes = await _db.ProductTypes.ToListAsync();
         ViewBag.CategoryId = categoryId ?? 0;
         ViewBag.SearchTerm = search;
 
